@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:MyApps.Views.Dialogs"
              xmlns:dialogs="clr-namespace:MyApps.ViewModels.Dialogs"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance dialogs:AddGroupViewModel}">
     
     <Grid Margin="8 16">

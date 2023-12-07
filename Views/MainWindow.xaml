@@ -107,10 +107,14 @@
                                             <ColumnDefinition />
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding Name}" />
-                                        <ui:Button Grid.Column="1" Margin="8 0" Padding="8" Icon="Play48" />
-                                        <ui:Button Grid.Column="2" Padding="8" Icon="MoreVertical48" />
+                                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="8 0" Text="Started" Foreground="{DynamicResource PaletteGreenBrush}"  Visibility="{Binding IsRunning, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="8 0" Text="Stopped" Foreground="{DynamicResource PaletteRedBrush}" Visibility="{Binding IsRunning, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+                                        <ui:Button Grid.Column="2" Margin="8 0" Padding="8" Foreground="{DynamicResource PaletteGreenBrush}"  Icon="Play48" Command="{Binding StartCommand}" Visibility="{Binding IsRunning, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+                                        <ui:Button Grid.Column="2" Margin="8 0" Padding="8" Foreground="{DynamicResource PaletteRedBrush}" Icon="Stop24" Command="{Binding StopCommand}" Visibility="{Binding IsRunning, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <ui:Button Grid.Column="3" Padding="8" Icon="MoreVertical48" />
                                     </Grid>
                                 </ui:CardAction>
                             </DataTemplate>

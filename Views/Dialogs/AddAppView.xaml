@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="MyApps.Views.Dialogs.AddAppView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MyApps.Views.Dialogs"
+             xmlns:dialogs="clr-namespace:MyApps.ViewModels.Dialogs"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance dialogs:AddAppViewModel}">
+    
+    <Grid Margin="8 16">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <ui:Button Margin="8" Grid.Row="0" Content="Choose app" Command="{Binding ChooseFileCommand}" Visibility="{Binding IsEmptyFilePath, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Stretch"/>
+        
+        <Grid Margin="8" Grid.Row="0" Visibility="{Binding IsEmptyFilePath, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="4 0" Grid.Column="0" VerticalAlignment="Center" Text="{Binding App.FilePath}" TextWrapping="Wrap"/>
+            <ui:Button Grid.Column="1" Icon="Dismiss48" Command="{Binding DeletePathCommand}"/>
+        </Grid>
+        
+        <Grid Margin="8" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="7*"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Margin="4 0" Grid.Column="0" VerticalAlignment="Center" Text="Name"/>
+            <TextBox Grid.Column="1" Text="{Binding App.Name}"/>
+        </Grid>
+        
+        <Grid Margin="8" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="7*"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Margin="4 0" Grid.Column="0" VerticalAlignment="Center" Text="Arguments"/>
+            <TextBox Grid.Column="1" Text="{Binding App.Arguments}"/>
+        </Grid>
+        
+    </Grid>
+    
+</UserControl>

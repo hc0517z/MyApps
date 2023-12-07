@@ -126,21 +126,34 @@ public partial class MainWindowViewModel : ObservableObject
         {
             var newGroup = await _groupService.AddGroupAsync(addGroupViewModel.GroupName);
             Groups.Add(new ObservableGroup(newGroup));
+            
+            await _snackbarService.ShowAsync("Group added", "Group added successfully.");
         }
-
-        await _snackbarService.ShowAsync("Group added", "Group added successfully.");
     }
 
     [RelayCommand]
     private async Task OnAddAppAsync()
     {
-        Domain.App newApp;
+        var _dialog = _dialogService.GetDialogControl();
         
-        if (SelectedGroup == null)
-            newApp = await _appService.AddAppAsync("New App");
-        else
-            newApp = await _appService.AddAppAsync(SelectedGroup.Id, "New App");
+        _dialog.Title = "Add App";
+        _dialog.Message = "Enter a information for the new app.";
+        _dialog.DialogHeight = 500;
+        _dialog.DialogWidth = 800;
 
-        AppInfos.Add(new ObservableApp(newApp));
+        var addAppViewModel = ViewModelLocator.AddApp;
+        _dialog.Content = addAppViewModel;
+        
+        _dialog.ButtonRightName = "Cancel";
+        _dialog.ButtonLeftName = "Add";
+        
+        var result = await _dialog.ShowAndWaitAsync();
+
+        if (result == IDialogControl.ButtonPressed.Left)
+        {
+            addAppViewModel.App.GroupId = SelectedGroup?.Id;
+            await _appService.AddAppAsync(addAppViewModel.App);
+            AppInfos.Add(addAppViewModel.App);
+        }
     }
 }

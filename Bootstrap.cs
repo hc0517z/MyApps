@@ -32,6 +32,7 @@ namespace MyApps
                     .AddSingleton(_ => _configuration)
                     .AddSingleton<MainWindowViewModel>()
                     .AddTransient<AddGroupViewModel>()
+                    .AddTransient<AddAppViewModel>()
                     .AddSingleton<IThemeService, ThemeService>()
                     .AddSingleton<IDialogService, DialogService>()
                     .AddSingleton<ISnackbarService, SnackbarService>()

@@ -13,7 +13,7 @@
         <ResourceDictionary>
 
             <ResourceDictionary.MergedDictionaries>
-                <ui:ThemesDictionary Theme="Light" />
+                <ui:ThemesDictionary Theme="Dark" />
                 <ui:ControlsDictionary />
             </ResourceDictionary.MergedDictionaries>
 
@@ -29,6 +29,10 @@
             <!--  dialogs  -->
             <DataTemplate DataType="{x:Type dialogsVm:AddGroupViewModel}">
                 <dialogsV:AddGroupView />
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type dialogsVm:AddAppViewModel}">
+                <dialogsV:AddAppView />
             </DataTemplate>
             
         </ResourceDictionary>
