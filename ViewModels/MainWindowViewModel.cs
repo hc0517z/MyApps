@@ -61,7 +61,11 @@ public partial class MainWindowViewModel : ObservableRecipient,
         {
             SetProperty(ref _selectedGroup, value);
             OnPropertyChanged(nameof(CanExecuteAddApp));
-            if (value != null) GetAppsByGroupIdAsync(value.Id).ConfigureAwait(false);
+            if (value != null)
+            {
+                GetAppsByGroupIdAsync(value.Id).ConfigureAwait(false);
+                GroupText = SelectedGroup.Name;
+            }
         }
     }
 
@@ -78,13 +82,11 @@ public partial class MainWindowViewModel : ObservableRecipient,
         foreach (var app in apps) Apps.Add(app);
     }
 
-    private async Task GetAppsByGroupIdAsync(Guid groupId)
+    private async Task GetAppsByGroupIdAsync(Guid? groupId)
     {
         var apps = await _appService.GetAppsByGroupIdAsync(groupId);
         Apps.Clear();
         foreach (var app in apps) Apps.Add(app);
-        
-        GroupText = SelectedGroup.Name;
     }
 
     [RelayCommand]
@@ -101,9 +103,7 @@ public partial class MainWindowViewModel : ObservableRecipient,
     [RelayCommand]
     private async Task OnDisplayUngroupedApps()
     {
-        var apps = await _appService.GetAppsByGroupIdAsync(null);
-        Apps.Clear();
-        foreach (var app in apps) Apps.Add(app);
+        await GetAppsByGroupIdAsync(null);
         
         SelectedGroup = null;
         GroupText = "Ungrouped apps";
@@ -161,8 +161,8 @@ public partial class MainWindowViewModel : ObservableRecipient,
         if (result == IDialogControl.ButtonPressed.Left)
         {
             appViewModel.App.GroupId = SelectedGroup?.Id;
-            await _appService.AddAppAsync(appViewModel.App);
-            Apps.Add(appViewModel.App);
+            var newApp = await _appService.AddAppAsync(appViewModel.App);
+            Apps.Add(newApp);
             
             await _snackbarService.ShowAsync("App added", "App added successfully.");
         }
@@ -191,6 +191,7 @@ public partial class MainWindowViewModel : ObservableRecipient,
         if (result == IDialogControl.ButtonPressed.Left)
         {
             await _appService.UpdateAppAsync(appViewModel.App);
+            await GetAppsByGroupIdAsync(SelectedGroup?.Id);
             await _snackbarService.ShowAsync("App edited", "App edited successfully.");
         }
         else

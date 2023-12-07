@@ -14,6 +14,7 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         
         <ui:Button Margin="8" Grid.Row="0" Content="Choose app" Command="{Binding ChooseFileCommand}" Visibility="{Binding IsEmptyFilePath, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Stretch"/>
@@ -24,7 +25,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Margin="4 0" Grid.Column="0" VerticalAlignment="Center" Text="{Binding App.FilePath}" TextWrapping="Wrap"/>
-            <ui:Button Grid.Column="1" Icon="Dismiss48" Command="{Binding DeletePathCommand}"/>
+            <ui:Button Grid.Column="1" Padding="10" Icon="Dismiss48" Command="{Binding DeletePathCommand}"/>
         </Grid>
         
         <Grid Margin="8" Grid.Row="1">
@@ -45,6 +46,23 @@
             
             <TextBlock Margin="4 0" Grid.Column="0" VerticalAlignment="Center" Text="Arguments"/>
             <TextBox Grid.Column="1" Text="{Binding App.Arguments}"/>
+        </Grid>
+        
+        <Grid Margin="8" Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="7*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="4 0" Grid.Column="0" VerticalAlignment="Center" Text="Group"/>
+            
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <ComboBox Grid.Column="0" Margin="0 0 4 0" ItemsSource="{Binding Groups}" SelectedIndex="{Binding SelectedGroupIndex}"/>
+                <ui:Button Grid.Column="1" Padding="10" Icon="Dismiss48" Command="{Binding DeleteGroupCommand}"/>
+            </Grid>
         </Grid>
         
     </Grid>

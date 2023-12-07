@@ -21,4 +21,9 @@ public partial class ObservableGroup : ObservableObject
     {
         
     }
+
+    public override string ToString()
+    {
+        return Name;
+    }
 }

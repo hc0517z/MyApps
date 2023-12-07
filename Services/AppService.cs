@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using MyApps.Models;
@@ -29,24 +28,26 @@ public class AppService
         return apps.Select(app => new ObservableApp(app));
     }
     
-    public Task<Domain.App> AddAppAsync(ObservableApp observableApp)
+    public async Task<ObservableApp> AddAppAsync(ObservableApp observableApp)
     {
         var newApp = Domain.App.Create(observableApp.Name, observableApp.FilePath, observableApp.Arguments);
-        return _appRepository.AddAsync(newApp);
+        var app = await _appRepository.AddAsync(newApp);
+        return new ObservableApp(app);
     }
     
-    public Task<Domain.App> DeleteAppAsync(Guid id)
+    public async Task DeleteAppAsync(Guid id)
     {
-        return _appRepository.DeleteAsync(id);
+        await _appRepository.DeleteAsync(id);
     }
     
-    public async Task<Domain.App> UpdateAppAsync(ObservableApp observableApp)
+    public async Task UpdateAppAsync(ObservableApp observableApp)
     {
         var app = await _appRepository.GetByIdAsync(observableApp.Id);
+        app.GroupId = observableApp.GroupId;
         app.Name = observableApp.Name;
         app.FilePath = observableApp.FilePath;
         app.Arguments = observableApp.Arguments;
-        return await _appRepository.UpdateAsync(app);
+        await _appRepository.UpdateAsync(app);
     }
 
     public async Task<IEnumerable<ObservableApp>> GetAppsByGroupIdAsync(Guid? groupId)

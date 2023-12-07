@@ -41,6 +41,8 @@ public partial class ObservableApp : ObservableRecipient
     public Guid? GroupId { get; set; }
 
     public bool IsRunning => _process is { HasExited: false };
+    
+    public bool IsBatch => FilePath.EndsWith(".bat", StringComparison.OrdinalIgnoreCase);
 
     [RelayCommand]
     private Task OnStart()
@@ -54,9 +56,21 @@ public partial class ObservableApp : ObservableRecipient
     private Process Start()
     {
         var process = new Process();
-        process.StartInfo.FileName = FilePath;
-        process.StartInfo.Arguments = Arguments;
+
+        if (IsBatch)
+        {
+            process.StartInfo.FileName = "cmd.exe";
+            process.StartInfo.Arguments = $"/c \"{FilePath}\"";
+        }
+        else
+        {
+            process.StartInfo.FileName = FilePath;
+            process.StartInfo.Arguments = Arguments;
+        }
+        
+        process.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName(FilePath)!;
         process.EnableRaisingEvents = true;
+        
         process.Start();
         return process;
     }
