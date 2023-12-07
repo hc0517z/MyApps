@@ -5,11 +5,16 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MyApps.Models;
 using MyApps.Services;
+using Wpf.Ui.Common;
+using Wpf.Ui.Controls.Interfaces;
+using Wpf.Ui.Mvvm.Contracts;
 
 namespace MyApps.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject
 {
+    private readonly ISnackbarService _snackbarService;
+    private readonly IDialogService _dialogService;
     private readonly AppService _appService;
     private readonly GroupService _groupService;
 
@@ -30,10 +35,12 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<ObservableTag> _tags = new();
 
-    public MainWindowViewModel(GroupService groupService, AppService appService)
+    public MainWindowViewModel(GroupService groupService, AppService appService, IDialogService dialogService, ISnackbarService snackbarService)
     {
         _groupService = groupService;
         _appService = appService;
+        _dialogService = dialogService;
+        _snackbarService = snackbarService;
 
         LoadAsync().ConfigureAwait(false);
     }
@@ -101,8 +108,27 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private async Task OnAddGroupAsync()
     {
-        var newGroup = await _groupService.AddGroupAsync("New Group");
-        Groups.Add(new ObservableGroup(newGroup));
+        var _dialog = _dialogService.GetDialogControl();
+        
+        _dialog.Title = "Add Group";
+        _dialog.Message = "Enter a name for the new group.";
+        _dialog.DialogHeight = 300;
+
+        var addGroupViewModel = ViewModelLocator.AddGroup;
+        _dialog.Content = addGroupViewModel;
+        
+        _dialog.ButtonRightName = "Cancel";
+        _dialog.ButtonLeftName = "Add";
+        
+        var result = await _dialog.ShowAndWaitAsync();
+        
+        if (result == IDialogControl.ButtonPressed.Left)
+        {
+            var newGroup = await _groupService.AddGroupAsync(addGroupViewModel.GroupName);
+            Groups.Add(new ObservableGroup(newGroup));
+        }
+
+        await _snackbarService.ShowAsync("Group added", "Group added successfully.");
     }
 
     [RelayCommand]

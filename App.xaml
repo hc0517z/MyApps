@@ -6,6 +6,8 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:utilities="clr-namespace:MyApps.Utilities"
     xmlns:viewModels="clr-namespace:MyApps.ViewModels"
+    xmlns:dialogsVm="clr-namespace:MyApps.ViewModels.Dialogs"
+    xmlns:dialogsV="clr-namespace:MyApps.Views.Dialogs"
     StartupUri="/Views/MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -24,6 +26,11 @@
             <FontFamily x:Key="KoPubDotumLight">pack://application:,,,/MyApps;component/Assets/Fonts/#KoPubWorld돋움체_Pro Light</FontFamily>
             <FontFamily x:Key="KoPubDotumMedium">pack://application:,,,/MyApps;component/Assets/Fonts/#KoPubWorld돋움체_Pro Medium</FontFamily>
 
+            <!--  dialogs  -->
+            <DataTemplate DataType="{x:Type dialogsVm:AddGroupViewModel}">
+                <dialogsV:AddGroupView />
+            </DataTemplate>
+            
         </ResourceDictionary>
     </Application.Resources>
 </Application>

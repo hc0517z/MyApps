@@ -1,16 +1,46 @@
 ﻿using System.Windows;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using Wpf.Ui.Appearance;
+using Wpf.Ui.Controls.Interfaces;
+using Wpf.Ui.Mvvm.Contracts;
 
-namespace MyApps.Views
+namespace MyApps.Views;
+
+/// <summary>
+///     Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow
+    public MainWindow()
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-            Wpf.Ui.Appearance.Accent.ApplySystemAccent();
-        }
+        InitializeComponent();
+        Accent.ApplySystemAccent();
+
+        var dialogService = Ioc.Default.GetRequiredService<IDialogService>();
+        dialogService.SetDialogControl(RootDialog);
+        
+        var snackbarService = Ioc.Default.GetRequiredService<ISnackbarService>();
+        snackbarService.SetSnackbarControl(RootSnackbar);
+
+        Loaded += OnLoaded;
+        Unloaded += OnUnloaded;
+    }
+
+    private void OnLoaded(object sender, RoutedEventArgs e)
+    {
+        RootDialog.ButtonLeftClick += DialogControlOnButtonClick;
+        RootDialog.ButtonRightClick += DialogControlOnButtonClick;
+    }
+
+    private void OnUnloaded(object sender, RoutedEventArgs e)
+    {
+        RootDialog.ButtonLeftClick -= DialogControlOnButtonClick;
+        RootDialog.ButtonRightClick -= DialogControlOnButtonClick;
+    }
+
+    private void DialogControlOnButtonClick(object sender, RoutedEventArgs e)
+    {
+        var dialogControl = (IDialogControl)sender;
+        dialogControl.Hide();
     }
 }

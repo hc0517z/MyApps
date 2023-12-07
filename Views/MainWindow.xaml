@@ -120,5 +120,19 @@
             </Grid>
 
         </DockPanel>
+        
+        <ui:Dialog
+            x:Name="RootDialog"
+            Grid.Row="0"
+            Grid.RowSpan="2"/>
+        
+        <ui:Snackbar
+            x:Name="RootSnackbar"
+            Grid.Row="1"
+            MaxWidth="600"
+            Appearance="Secondary"
+            Icon="Alert48"
+            CloseButtonEnabled="True"
+            Timeout="5000" />
     </Grid>
 </ui:UiWindow>

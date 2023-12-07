@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MyApps.Repositories;
 using MyApps.Services;
 using MyApps.ViewModels;
+using MyApps.ViewModels.Dialogs;
 using Wpf.Ui.Mvvm.Contracts;
 using Wpf.Ui.Mvvm.Services;
 
@@ -30,7 +31,10 @@ namespace MyApps
                 new ServiceCollection()
                     .AddSingleton(_ => _configuration)
                     .AddSingleton<MainWindowViewModel>()
+                    .AddTransient<AddGroupViewModel>()
                     .AddSingleton<IThemeService, ThemeService>()
+                    .AddSingleton<IDialogService, DialogService>()
+                    .AddSingleton<ISnackbarService, SnackbarService>()
                     .AddSingleton(_ => new AppRepository(@"Json\apps.json"))
                     .AddSingleton(_ => new GroupRepository(@"Json\groups.json"))
                     .AddSingleton<AppService>()
