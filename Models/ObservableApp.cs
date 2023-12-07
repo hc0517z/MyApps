@@ -3,10 +3,12 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using MyApps.Messages;
 
 namespace MyApps.Models;
 
-public partial class ObservableApp : ObservableObject
+public partial class ObservableApp : ObservableRecipient
 {
     [ObservableProperty]
     private string _arguments;
@@ -26,10 +28,13 @@ public partial class ObservableApp : ObservableObject
         GroupId = app.GroupId;
         FilePath = app.FilePath;
         Arguments = app.Arguments;
+
+        IsActive = true;
     }
 
     public ObservableApp()
     {
+        IsActive = true;
     }
 
     public Guid Id { get; }
@@ -69,5 +74,23 @@ public partial class ObservableApp : ObservableObject
         _process.Dispose();
         _process = null;
         OnPropertyChanged(nameof(IsRunning));
+    }
+    
+    [RelayCommand]
+    private void OnEdit()
+    {
+        Messenger.Send(new EditAppMessage(this));
+    }
+
+    [RelayCommand]
+    private void OnOpenDirectory()
+    {
+        Messenger.Send(new OpenDirectoryAppMessage(this));
+    }
+    
+    [RelayCommand]
+    private void OnDelete()
+    {
+        Messenger.Send(new DeleteAppMessage(this));
     }
 }

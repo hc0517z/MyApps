@@ -6,7 +6,7 @@ using MyApps.Models;
 
 namespace MyApps.ViewModels.Dialogs;
 
-public partial class AddAppViewModel : ObservableObject
+public partial class AppViewModel : ObservableObject
 {
     [ObservableProperty]
     private ObservableApp _app = new();

@@ -17,6 +17,12 @@ public class AppService
         _appRepository = appRepository;
     }
     
+    public async Task<ObservableApp> GetAppByIdAsync(Guid id)
+    {
+        var app = await _appRepository.GetByIdAsync(id);
+        return new ObservableApp(app);
+    }
+    
     public async Task<IEnumerable<ObservableApp>> GetAppsAsync()
     {
         var apps = await _appRepository.GetAllAsync();
@@ -34,10 +40,12 @@ public class AppService
         return _appRepository.DeleteAsync(id);
     }
     
-    public async Task<Domain.App> UpdateAppAsync(Guid id, string name)
+    public async Task<Domain.App> UpdateAppAsync(ObservableApp observableApp)
     {
-        var app = await _appRepository.GetByIdAsync(id);
-        app.Name = name;
+        var app = await _appRepository.GetByIdAsync(observableApp.Id);
+        app.Name = observableApp.Name;
+        app.FilePath = observableApp.FilePath;
+        app.Arguments = observableApp.Arguments;
         return await _appRepository.UpdateAsync(app);
     }
 

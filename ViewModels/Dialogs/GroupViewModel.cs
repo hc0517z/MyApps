@@ -2,7 +2,7 @@
 
 namespace MyApps.ViewModels.Dialogs;
 
-public partial class AddGroupViewModel : ObservableObject
+public partial class GroupViewModel : ObservableObject
 {
     [ObservableProperty]
     private string _groupName;

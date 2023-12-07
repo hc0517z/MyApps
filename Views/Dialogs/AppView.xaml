@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="MyApps.Views.Dialogs.AddAppView"
+﻿<UserControl x:Class="MyApps.Views.Dialogs.AppView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -7,7 +7,7 @@
              xmlns:dialogs="clr-namespace:MyApps.ViewModels.Dialogs"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance dialogs:AddAppViewModel}">
+             d:DataContext="{d:DesignInstance dialogs:AppViewModel}">
     
     <Grid Margin="8 16">
         <Grid.RowDefinitions>

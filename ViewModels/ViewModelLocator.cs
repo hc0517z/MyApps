@@ -7,8 +7,8 @@ namespace MyApps.ViewModels
     {
         public static MainWindowViewModel MainWindow => Ioc.Default.GetRequiredService<MainWindowViewModel>();
         
-        public static AddGroupViewModel AddGroup => Ioc.Default.GetRequiredService<AddGroupViewModel>();
+        public static GroupViewModel Group => Ioc.Default.GetRequiredService<GroupViewModel>();
         
-        public static AddAppViewModel AddApp => Ioc.Default.GetRequiredService<AddAppViewModel>();
+        public static AppViewModel App => Ioc.Default.GetRequiredService<AppViewModel>();
     }
 }

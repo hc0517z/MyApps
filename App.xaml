@@ -27,12 +27,12 @@
             <FontFamily x:Key="KoPubDotumMedium">pack://application:,,,/MyApps;component/Assets/Fonts/#KoPubWorld돋움체_Pro Medium</FontFamily>
 
             <!--  dialogs  -->
-            <DataTemplate DataType="{x:Type dialogsVm:AddGroupViewModel}">
-                <dialogsV:AddGroupView />
+            <DataTemplate DataType="{x:Type dialogsVm:GroupViewModel}">
+                <dialogsV:GroupView />
             </DataTemplate>
             
-            <DataTemplate DataType="{x:Type dialogsVm:AddAppViewModel}">
-                <dialogsV:AddAppView />
+            <DataTemplate DataType="{x:Type dialogsVm:AppViewModel}">
+                <dialogsV:AppView />
             </DataTemplate>
             
         </ResourceDictionary>

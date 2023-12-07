@@ -2,9 +2,9 @@
 
 namespace MyApps.Views.Dialogs;
 
-public partial class AddAppView : UserControl
+public partial class AppView : UserControl
 {
-    public AddAppView()
+    public AppView()
     {
         InitializeComponent();
     }

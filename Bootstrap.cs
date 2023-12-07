@@ -30,16 +30,17 @@ namespace MyApps
             Ioc.Default.ConfigureServices(
                 new ServiceCollection()
                     .AddSingleton(_ => _configuration)
-                    .AddSingleton<MainWindowViewModel>()
-                    .AddTransient<AddGroupViewModel>()
-                    .AddTransient<AddAppViewModel>()
                     .AddSingleton<IThemeService, ThemeService>()
                     .AddSingleton<IDialogService, DialogService>()
                     .AddSingleton<ISnackbarService, SnackbarService>()
                     .AddSingleton(_ => new AppRepository(@"Json\apps.json"))
                     .AddSingleton(_ => new GroupRepository(@"Json\groups.json"))
+                    .AddTransient<ExplorerService>()
                     .AddSingleton<AppService>()
                     .AddSingleton<GroupService>()
+                    .AddSingleton<MainWindowViewModel>()
+                    .AddTransient<GroupViewModel>()
+                    .AddTransient<AppViewModel>()
                     .BuildServiceProvider()
             );
 

@@ -2,9 +2,9 @@
 
 namespace MyApps.Views.Dialogs;
 
-public partial class AddGroupView : UserControl
+public partial class GroupView : UserControl
 {
-    public AddGroupView()
+    public GroupView()
     {
         InitializeComponent();
     }

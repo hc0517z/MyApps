@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="MyApps.Views.Dialogs.AddGroupView"
+﻿<UserControl x:Class="MyApps.Views.Dialogs.GroupView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:MyApps.Views.Dialogs"
              xmlns:dialogs="clr-namespace:MyApps.ViewModels.Dialogs"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance dialogs:AddGroupViewModel}">
+             d:DataContext="{d:DesignInstance dialogs:GroupViewModel}">
     
     <Grid Margin="8 16">
         <Grid.ColumnDefinitions>

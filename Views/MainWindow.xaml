@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:utilities="clr-namespace:MyApps.Utilities"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     Title="MainWindow"
     Width="800"
     Height="800"
@@ -15,6 +16,7 @@
     WindowBackdropType="Mica"
     WindowCornerPreference="Round"
     WindowStartupLocation="CenterScreen"
+    x:Name="uiWindow"
     mc:Ignorable="d">
 
     <Grid>
@@ -98,7 +100,7 @@
                 </Grid>
 
                 <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                    <ItemsControl ItemsSource="{Binding AppInfos}">
+                    <ItemsControl ItemsSource="{Binding Apps}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <ui:CardAction Margin="0 2" Icon="Apps48" IsChevronVisible="False">
@@ -114,7 +116,24 @@
                                         <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="8 0" Text="Stopped" Foreground="{DynamicResource PaletteRedBrush}" Visibility="{Binding IsRunning, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
                                         <ui:Button Grid.Column="2" Margin="8 0" Padding="8" Foreground="{DynamicResource PaletteGreenBrush}"  Icon="Play48" Command="{Binding StartCommand}" Visibility="{Binding IsRunning, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
                                         <ui:Button Grid.Column="2" Margin="8 0" Padding="8" Foreground="{DynamicResource PaletteRedBrush}" Icon="Stop24" Command="{Binding StopCommand}" Visibility="{Binding IsRunning, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                        <ui:Button Grid.Column="3" Padding="8" Icon="MoreVertical48" />
+                                        <ui:Button Grid.Column="3" Padding="8" Icon="MoreVertical48" x:Name="btnMore">
+                                            <b:Interaction.Triggers>
+                                                <b:EventTrigger EventName="Click">
+                                                    <b:ChangePropertyAction TargetObject="{Binding ContextMenu, ElementName=btnMore}"
+                                                                            PropertyName="PlacementTarget" Value="{Binding ElementName=btnMore,Mode=OneWay}"/>
+                                                    <b:ChangePropertyAction TargetObject="{Binding ContextMenu, ElementName=btnMore}"
+                                                                            PropertyName="IsOpen"
+                                                                            Value="True"/>
+                                                </b:EventTrigger>
+                                            </b:Interaction.Triggers>
+                                            <ui:Button.ContextMenu>
+                                                <ContextMenu>
+                                                    <ui:MenuItem Header="Edit" SymbolIcon="Edit48" Command="{Binding EditCommand}" />
+                                                    <ui:MenuItem Header="Directory" SymbolIcon="Folder48" Command="{Binding OpenDirectoryCommand}" />
+                                                    <ui:MenuItem Header="Delete" SymbolIcon="Delete48" Command="{Binding DeleteCommand}" />
+                                                </ContextMenu>
+                                            </ui:Button.ContextMenu>
+                                        </ui:Button>
                                     </Grid>
                                 </ui:CardAction>
                             </DataTemplate>
