@@ -20,7 +20,7 @@ public class App : Entity
         };
     }
 
-    public static App Create(Guid groupId, string name, string filePath, string arguments)
+    public static App Create(Guid? groupId, string name, string filePath, string arguments)
     {
         return new App
         {

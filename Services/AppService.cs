@@ -30,7 +30,7 @@ public class AppService
     
     public async Task<ObservableApp> AddAppAsync(ObservableApp observableApp)
     {
-        var newApp = Domain.App.Create(observableApp.Name, observableApp.FilePath, observableApp.Arguments);
+        var newApp = Domain.App.Create(observableApp.GroupId, observableApp.Name, observableApp.FilePath, observableApp.Arguments);
         var app = await _appRepository.AddAsync(newApp);
         return new ObservableApp(app);
     }

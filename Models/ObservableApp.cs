@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -40,11 +39,7 @@ public partial class ObservableApp : ObservableRecipient
 
     public Guid Id { get; }
     public Guid? GroupId { get; set; }
-
-    public bool IsRunning => _process is { HasExited: false };
-
-    public bool IsBatch => FilePath.EndsWith(".bat", StringComparison.OrdinalIgnoreCase);
-
+    
     public void Update(ObservableApp other)
     {
         Name = other.Name;
@@ -52,6 +47,10 @@ public partial class ObservableApp : ObservableRecipient
         FilePath = other.FilePath;
         Arguments = other.Arguments;
     }
+
+    public bool IsRunning => _process is { HasExited: false };
+    
+    public bool IsBatch => FilePath.EndsWith(".bat", StringComparison.OrdinalIgnoreCase);
 
     [RelayCommand]
     private Task OnStart()
@@ -76,10 +75,10 @@ public partial class ObservableApp : ObservableRecipient
             process.StartInfo.FileName = FilePath;
             process.StartInfo.Arguments = Arguments;
         }
-
-        process.StartInfo.WorkingDirectory = Path.GetDirectoryName(FilePath)!;
+        
+        process.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName(FilePath)!;
         process.EnableRaisingEvents = true;
-
+        
         process.Start();
         return process;
     }
@@ -98,7 +97,7 @@ public partial class ObservableApp : ObservableRecipient
         _process = null;
         OnPropertyChanged(nameof(IsRunning));
     }
-
+    
     [RelayCommand]
     private void OnEdit()
     {
@@ -110,7 +109,7 @@ public partial class ObservableApp : ObservableRecipient
     {
         Messenger.Send(new OpenDirectoryAppMessage(this));
     }
-
+    
     [RelayCommand]
     private void OnDelete()
     {

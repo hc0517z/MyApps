@@ -13,16 +13,18 @@ using Wpf.Ui.Mvvm.Contracts;
 
 namespace MyApps.ViewModels;
 
-public partial class MainWindowViewModel : ObservableRecipient, 
-    IRecipient<EditAppMessage>, 
-    IRecipient<OpenDirectoryAppMessage>, 
-    IRecipient<DeleteAppMessage>
+public partial class MainWindowViewModel : ObservableRecipient,
+    IRecipient<EditAppMessage>,
+    IRecipient<OpenDirectoryAppMessage>,
+    IRecipient<DeleteAppMessage>,
+    IRecipient<EditGroupMessage>,
+    IRecipient<DeleteGroupMessage>
 {
-    private readonly ExplorerService _explorerService;
-    private readonly ISnackbarService _snackbarService;
-    private readonly IDialogService _dialogService;
     private readonly AppService _appService;
+    private readonly IDialogService _dialogService;
+    private readonly ExplorerService _explorerService;
     private readonly GroupService _groupService;
+    private readonly ISnackbarService _snackbarService;
 
     [ObservableProperty]
     private ObservableCollection<ObservableApp> _apps = new();
@@ -31,17 +33,18 @@ public partial class MainWindowViewModel : ObservableRecipient,
     private ObservableCollection<ObservableGroup> _groups = new();
 
     [ObservableProperty]
-    private string _searchText;
+    private string _groupText = "All apps";
 
     [ObservableProperty]
-    private string _groupText = "All apps";
+    private string _searchText;
 
     private ObservableGroup _selectedGroup;
 
     [ObservableProperty]
     private ObservableCollection<ObservableTag> _tags = new();
 
-    public MainWindowViewModel(GroupService groupService, AppService appService, IDialogService dialogService, ISnackbarService snackbarService, ExplorerService explorerService)
+    public MainWindowViewModel(GroupService groupService, AppService appService, IDialogService dialogService, ISnackbarService snackbarService,
+        ExplorerService explorerService)
     {
         _groupService = groupService;
         _appService = appService;
@@ -71,6 +74,114 @@ public partial class MainWindowViewModel : ObservableRecipient,
 
     public bool CanExecuteAddApp => SelectedGroup != null;
 
+    public async void Receive(DeleteAppMessage message)
+    {
+        var dialog = GetDialogControl("Delete", "Cancel");
+        dialog.Content = null;
+
+        var result = await dialog.ShowAndWaitAsync("Delete App", "Are you sure you want to delete this app?");
+        if (result != IDialogControl.ButtonPressed.Left) return;
+
+        var app = message.Value;
+        Apps.Remove(app);
+        await _appService.DeleteAppAsync(app.Id);
+        RefreshGroupsProperties();
+
+        await _snackbarService.ShowAsync("App deleted", "App deleted successfully.");
+    }
+
+    public async void Receive(DeleteGroupMessage message)
+    {
+        var dialog = GetDialogControl("Delete", "Cancel");
+        dialog.Content = null;
+        var result = await dialog.ShowAndWaitAsync("Delete Group", "Are you sure you want to delete this group?");
+        if (result != IDialogControl.ButtonPressed.Left) return;
+
+        var group = message.Value;
+        Groups.Remove(group);
+        await _groupService.DeleteGroupAsync(group.Id);
+
+        await _snackbarService.ShowAsync("Group deleted", "Group deleted successfully.");
+    }
+
+    public async void Receive(EditAppMessage message)
+    {
+        var app = message.Value;
+
+        var dialog = GetDialogControl("Edit", "Cancel");
+
+        dialog.Title = "Edit App";
+        dialog.Message = "Edit a information for the app.";
+        dialog.DialogHeight = 500;
+        dialog.DialogWidth = 800;
+
+        var appViewModel = ViewModelLocator.App;
+        appViewModel.App = app;
+        dialog.Content = appViewModel;
+
+        var result = await dialog.ShowAndWaitAsync();
+
+        if (result == IDialogControl.ButtonPressed.Left)
+        {
+            await _appService.UpdateAppAsync(appViewModel.App);
+            await GetAppsByGroupIdAsync(SelectedGroup?.Id);
+
+            RefreshGroupsProperties();
+
+            await _snackbarService.ShowAsync("App edited", "App edited successfully.");
+        }
+        else
+        {
+            // restore
+            var appByIdAsync = await _appService.GetAppByIdAsync(app.Id);
+            app.Update(appByIdAsync);
+        }
+    }
+
+    public async void Receive(EditGroupMessage message)
+    {
+        var group = message.Value;
+
+        var dialog = GetDialogControl("Edit", "Cancel");
+
+        dialog.Title = "Edit Group";
+        dialog.Message = "Edit a information for the group.";
+        dialog.DialogHeight = 300;
+
+        var groupViewModel = ViewModelLocator.Group;
+        groupViewModel.GroupName = group.Name;
+        dialog.Content = groupViewModel;
+
+        var result = await dialog.ShowAndWaitAsync();
+
+        if (result == IDialogControl.ButtonPressed.Left)
+        {
+            group.Name = groupViewModel.GroupName;
+            await _groupService.UpdateGroupAsync(group);
+            RefreshGroupsProperties();
+
+            await _snackbarService.ShowAsync("Group edited", "Group edited successfully.");
+        }
+    }
+
+    public void Receive(OpenDirectoryAppMessage message)
+    {
+        var app = message.Value;
+        var directoryName = Path.GetDirectoryName(app.FilePath);
+        _explorerService.Open(directoryName);
+    }
+
+    private IDialogControl GetDialogControl(string leftButtonName, string rightButtonName)
+    {
+        var dialog = _dialogService.GetDialogControl();
+        dialog.Content = null;
+        dialog.DialogHeight = 200;
+        dialog.DialogWidth = 400;
+        dialog.ButtonLeftName = leftButtonName;
+        dialog.ButtonRightName = rightButtonName;
+        return dialog;
+    }
+
     private async Task LoadAsync()
     {
         var groups = await _groupService.GetGroupsAsync();
@@ -95,20 +206,20 @@ public partial class MainWindowViewModel : ObservableRecipient,
         var apps = await _appService.GetAppsAsync();
         Apps.Clear();
         foreach (var app in apps) Apps.Add(app);
-        
+
         SelectedGroup = null;
         GroupText = "All apps";
     }
-    
+
     [RelayCommand]
     private async Task OnDisplayUngroupedApps()
     {
         await GetAppsByGroupIdAsync(null);
-        
+
         SelectedGroup = null;
         GroupText = "Ungrouped apps";
     }
-    
+
     [RelayCommand]
     private void OnSearch()
     {
@@ -117,25 +228,22 @@ public partial class MainWindowViewModel : ObservableRecipient,
     [RelayCommand]
     private async Task OnAddGroupAsync()
     {
-        var _dialog = _dialogService.GetDialogControl();
-        
-        _dialog.Title = "Add Group";
-        _dialog.Message = "Enter a name for the new group.";
-        _dialog.DialogHeight = 300;
+        var dialog = GetDialogControl("Add", "Cancel");
+
+        dialog.Title = "Add Group";
+        dialog.Message = "Enter a name for the new group.";
+        dialog.DialogHeight = 300;
 
         var groupViewModel = ViewModelLocator.Group;
-        _dialog.Content = groupViewModel;
-        
-        _dialog.ButtonRightName = "Cancel";
-        _dialog.ButtonLeftName = "Add";
-        
-        var result = await _dialog.ShowAndWaitAsync();
-        
+        dialog.Content = groupViewModel;
+
+        var result = await dialog.ShowAndWaitAsync();
+
         if (result == IDialogControl.ButtonPressed.Left)
         {
             var newGroup = await _groupService.AddGroupAsync(groupViewModel.GroupName);
             Groups.Add(new ObservableGroup(newGroup));
-            
+
             await _snackbarService.ShowAsync("Group added", "Group added successfully.");
         }
     }
@@ -143,77 +251,32 @@ public partial class MainWindowViewModel : ObservableRecipient,
     [RelayCommand]
     private async Task OnAddAppAsync()
     {
-        var _dialog = _dialogService.GetDialogControl();
-        
-        _dialog.Title = "Add App";
-        _dialog.Message = "Enter a information for the new app.";
-        _dialog.DialogHeight = 500;
-        _dialog.DialogWidth = 800;
+        var dialog = GetDialogControl("Add", "Cancel");
+
+        dialog.Title = "Add App";
+        dialog.Message = "Enter a information for the new app.";
+        dialog.DialogHeight = 500;
+        dialog.DialogWidth = 800;
 
         var appViewModel = ViewModelLocator.App;
-        _dialog.Content = appViewModel;
-        
-        _dialog.ButtonRightName = "Cancel";
-        _dialog.ButtonLeftName = "Add";
-        
-        var result = await _dialog.ShowAndWaitAsync();
+        appViewModel.SelectGroup(SelectedGroup?.Id);
+        dialog.Content = appViewModel;
+
+        var result = await dialog.ShowAndWaitAsync();
 
         if (result == IDialogControl.ButtonPressed.Left)
         {
-            appViewModel.App.GroupId = SelectedGroup?.Id;
             var newApp = await _appService.AddAppAsync(appViewModel.App);
             Apps.Add(newApp);
-            
+
+            RefreshGroupsProperties();
+
             await _snackbarService.ShowAsync("App added", "App added successfully.");
         }
     }
 
-    public async void Receive(EditAppMessage message)
+    private void RefreshGroupsProperties()
     {
-        var app = message.Value;
-        
-        var _dialog = _dialogService.GetDialogControl();
-        
-        _dialog.Title = "Edit App";
-        _dialog.Message = "Edit a information for the app.";
-        _dialog.DialogHeight = 500;
-        _dialog.DialogWidth = 800;
-        
-        var appViewModel = ViewModelLocator.App;
-        appViewModel.App = app;
-        _dialog.Content = appViewModel;
-        
-        _dialog.ButtonRightName = "Cancel";
-        _dialog.ButtonLeftName = "Edit";
-        
-        var result = await _dialog.ShowAndWaitAsync();
-        
-        if (result == IDialogControl.ButtonPressed.Left)
-        {
-            await _appService.UpdateAppAsync(appViewModel.App);
-            await GetAppsByGroupIdAsync(SelectedGroup?.Id);
-            await _snackbarService.ShowAsync("App edited", "App edited successfully.");
-        }
-        else
-        {
-            // restore
-            var appByIdAsync = await _appService.GetAppByIdAsync(app.Id);
-            app.Update(appByIdAsync);
-        }
-    }
-
-    public void Receive(OpenDirectoryAppMessage message)
-    {
-        var app = message.Value;
-        var directoryName = Path.GetDirectoryName(app.FilePath);
-        _explorerService.Open(directoryName);
-    }
-
-    public async void Receive(DeleteAppMessage message)
-    {
-        var app = message.Value;
-        Apps.Remove(app);
-        await _appService.DeleteAppAsync(app.Id);
-        await _snackbarService.ShowAsync("App deleted", "App deleted successfully.");
+        foreach (var group in Groups) group.RaisePropertiesChanged();
     }
 }

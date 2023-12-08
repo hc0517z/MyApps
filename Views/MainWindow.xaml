@@ -16,7 +16,6 @@
     WindowBackdropType="Mica"
     WindowCornerPreference="Round"
     WindowStartupLocation="CenterScreen"
-    x:Name="uiWindow"
     mc:Ignorable="d">
 
     <Grid>
@@ -29,29 +28,61 @@
 
         <DockPanel Grid.Row="1" LastChildFill="True">
 
-            <ScrollViewer Width="200" Margin="8 8 0 8" utilities:TopMouseScrollPriorityBehavior.TopMouseScrollPriority="True" DockPanel.Dock="Left" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer Width="300" Margin="8 8 0 8" utilities:TopMouseScrollPriorityBehavior.TopMouseScrollPriority="True" DockPanel.Dock="Left" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel>
                     <ui:Button Margin="0 2" Padding="8" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Command="{Binding DisplayAllAppsCommand}" Content="All apps" Icon="BorderAll24" />
                     <ui:Button Margin="0 2" Padding="8" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Command="{Binding DisplayUngroupedAppsCommand}" Content="Ungrouped apps" Icon="GroupDismiss24" />
-                    <ui:CardExpander Margin="0 2" VerticalAlignment="Center" Icon="Group24">
-                        <ui:CardExpander.Header>
+                    <Expander Margin="0 2" Padding="8" VerticalAlignment="Center" IsExpanded="True">
+                        <Expander.Header>
                             <Grid>
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="Groups" />
-                                <ui:Button Grid.Column="1" Margin="0 0 8 0" Padding="4" Command="{Binding AddGroupCommand}" Icon="Add48" />
+                                <ui:SymbolIcon Grid.Column="0" Margin="0,0,8,0" VerticalAlignment="Center" Symbol="GroupList24" />
+                                <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="Groups" />
+                                <ui:Button Grid.Column="2" Margin="0 0 8 0" Padding="4" Command="{Binding AddGroupCommand}" Icon="Add48" />
                             </Grid>
-                        </ui:CardExpander.Header>
-                        <ListBox VerticalAlignment="Top" ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}">
-                            <ListBox.ItemTemplate>
+                        </Expander.Header>
+                        <ListView VerticalAlignment="Top" ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}">
+                            <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                                    <Grid Margin="8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <ui:SymbolIcon Grid.Column="0" Margin="0,0,8,0" VerticalAlignment="Center" Symbol="Group24" />
+                                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding Name}" Margin="0 0 8 0" />
+                                        <TextBlock Grid.Column="2" VerticalAlignment="Center" Margin="0 0 8 0" FontSize="12" Foreground="{DynamicResource TextFillColorTertiaryBrush}" >
+                                            <Run Text="{Binding AppCount, Mode=OneWay}"/>
+                                            <Run Text="apps"/>
+                                        </TextBlock>
+                                        <ui:Button Grid.Column="3" Padding="4" Icon="MoreVertical48" x:Name="btnMoreGroup">
+                                            <b:Interaction.Triggers>
+                                                <b:EventTrigger EventName="Click">
+                                                    <b:ChangePropertyAction TargetObject="{Binding ContextMenu, ElementName=btnMoreGroup}"
+                                                                            PropertyName="PlacementTarget" Value="{Binding ElementName=btnMoreGroup,Mode=OneWay}"/>
+                                                    <b:ChangePropertyAction TargetObject="{Binding ContextMenu, ElementName=btnMoreGroup}"
+                                                                            PropertyName="IsOpen"
+                                                                            Value="True"/>
+                                                </b:EventTrigger>
+                                            </b:Interaction.Triggers>
+                                            <ui:Button.ContextMenu>
+                                                <ContextMenu>
+                                                    <ui:MenuItem Header="Edit" SymbolIcon="Edit48" Command="{Binding EditCommand}" />
+                                                    <ui:MenuItem Header="Delete" SymbolIcon="Delete48" Command="{Binding DeleteCommand}" />
+                                                </ContextMenu>
+                                            </ui:Button.ContextMenu>
+                                        </ui:Button>
+                                    </Grid>
                                 </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </ui:CardExpander>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Expander>
 
                     <ui:CardExpander Margin="0 2" Icon="TagMultiple24" Visibility="Collapsed">
                         <ui:CardExpander.Header>

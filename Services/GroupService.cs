@@ -28,6 +28,13 @@ public class GroupService
         var newGroup = Group.Create(name);
         return await _groupRepository.AddAsync(newGroup);
     }
+    
+    public async Task<Group> UpdateGroupAsync(ObservableGroup observableGroup)
+    {
+        var group = await _groupRepository.GetByIdAsync(observableGroup.Id);
+        group.Name = observableGroup.Name;
+        return await _groupRepository.UpdateAsync(group);
+    }
 
     public async Task<Group> DeleteGroupAsync(Guid id)
     {

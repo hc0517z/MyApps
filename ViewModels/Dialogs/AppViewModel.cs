@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,7 +36,7 @@ public partial class AppViewModel : ObservableObject
         {
             SetProperty(ref _app, value);
 
-            if (App.Id != default) SelectedGroupIndex = Groups.ToList().FindIndex(g => g.Id == App.GroupId);
+            if (App.Id != default) SelectGroup(App.GroupId);
         }
     }
 
@@ -53,6 +54,11 @@ public partial class AppViewModel : ObservableObject
 
             SetProperty(ref _selectedGroupIndex, value);
         }
+    }
+
+    public void SelectGroup(Guid? groupId)
+    {
+        SelectedGroupIndex = Groups.ToList().FindIndex(g => g.Id == groupId);
     }
 
     private async Task LoadAsync()
