@@ -197,7 +197,8 @@ public partial class MainWindowViewModel : ObservableRecipient,
         else
         {
             // restore
-            Apps[Apps.IndexOf(app)] = await _appService.GetAppByIdAsync(app.Id);
+            var appByIdAsync = await _appService.GetAppByIdAsync(app.Id);
+            app.Update(appByIdAsync);
         }
     }
 
