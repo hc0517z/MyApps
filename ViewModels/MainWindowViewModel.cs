@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -39,6 +40,8 @@ public partial class MainWindowViewModel : ObservableRecipient,
     private string _searchText;
 
     private ObservableGroup _selectedGroup;
+    
+    private bool IsAllApps => GroupText.Contains("All");
 
     [ObservableProperty]
     private ObservableCollection<ObservableTag> _tags = new();
@@ -55,6 +58,13 @@ public partial class MainWindowViewModel : ObservableRecipient,
         LoadAsync().ConfigureAwait(false);
 
         IsActive = true;
+        
+        Apps.CollectionChanged += AppsOnCollectionChanged;
+    }
+
+    private void AppsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        
     }
 
     public ObservableGroup SelectedGroup
@@ -94,12 +104,23 @@ public partial class MainWindowViewModel : ObservableRecipient,
     {
         var dialog = GetDialogControl("Delete", "Cancel");
         dialog.Content = null;
-        var result = await dialog.ShowAndWaitAsync("Delete Group", "Are you sure you want to delete this group?");
+        var result = await dialog.ShowAndWaitAsync("Delete Group", $@"Are you sure you want to delete this group?{Environment.NewLine}Apps in this group will be moved to Ungrouped Apps.");
         if (result != IDialogControl.ButtonPressed.Left) return;
 
         var group = message.Value;
+        var needToMoveApps = SelectedGroup.Id == group.Id;
+
         Groups.Remove(group);
         await _groupService.DeleteGroupAsync(group.Id);
+
+        var apps = await _appService.GetAppsByGroupIdAsync(group.Id);
+        foreach (var app in apps)
+        {
+            app.GroupId = null;
+            await _appService.UpdateAppAsync(app);
+        }
+
+        if (needToMoveApps) await OnDisplayUngroupedApps();
 
         await _snackbarService.ShowAsync("Group deleted", "Group deleted successfully.");
     }
@@ -124,7 +145,8 @@ public partial class MainWindowViewModel : ObservableRecipient,
         if (result == IDialogControl.ButtonPressed.Left)
         {
             await _appService.UpdateAppAsync(appViewModel.App);
-            await GetAppsByGroupIdAsync(SelectedGroup?.Id);
+            
+            if (!IsAllApps) await GetAppsByGroupIdAsync(SelectedGroup?.Id);
 
             RefreshGroupsProperties();
 
