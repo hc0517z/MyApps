@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using MyApps.Messages;
 using MyApps.Models;
 using MyApps.Services;
+using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls.Interfaces;
 using Wpf.Ui.Mvvm.Contracts;
 
@@ -22,6 +23,7 @@ public partial class MainWindowViewModel : ObservableRecipient,
     IRecipient<DeleteGroupMessage>
 {
     private readonly AppService _appService;
+    private readonly IThemeService _themeService;
     private readonly IDialogService _dialogService;
     private readonly ExplorerService _explorerService;
     private readonly GroupService _groupService;
@@ -47,13 +49,14 @@ public partial class MainWindowViewModel : ObservableRecipient,
     private ObservableCollection<ObservableTag> _tags = new();
 
     public MainWindowViewModel(GroupService groupService, AppService appService, IDialogService dialogService, ISnackbarService snackbarService,
-        ExplorerService explorerService)
+        ExplorerService explorerService, IThemeService themeService)
     {
         _groupService = groupService;
         _appService = appService;
         _dialogService = dialogService;
         _snackbarService = snackbarService;
         _explorerService = explorerService;
+        _themeService = themeService;
 
         LoadAsync().ConfigureAwait(false);
 
@@ -300,5 +303,20 @@ public partial class MainWindowViewModel : ObservableRecipient,
     private void RefreshGroupsProperties()
     {
         foreach (var group in Groups) group.RaisePropertiesChanged();
+    }
+    
+    
+    [RelayCommand]
+    private async Task ChangeTheme()
+    {
+        var dialog = GetDialogControl("Change", "Cancel");
+        
+        var result = await dialog.ShowAndWaitAsync("Change Theme", "Are you sure you want to change the theme?");
+        
+        if (result != IDialogControl.ButtonPressed.Left) return;
+        
+        _themeService.SetTheme(
+            _themeService.GetTheme() == ThemeType.Dark ? ThemeType.Light : ThemeType.Dark
+        );
     }
 }

@@ -21,12 +21,28 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <ui:TitleBar Title="My Apps" Grid.Row="0" FontFamily="{StaticResource KoPubDotumMedium}" FontSize="14" />
+        
+        <Grid Grid.Row="1" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            
+            <Menu Grid.Column="0">
+                <ui:MenuItem Header="File">
+                    <ui:MenuItem Header="Save directory group" SymbolIcon="DocumentArrowRight24"/>
+                    <ui:MenuItem Header="Load directory group" SymbolIcon="DocumentArrowLeft24"/>
+                </ui:MenuItem>
+                <ui:MenuItem Header="Theme" Command="{Binding ChangeThemeCommand}" />
+            </Menu>
+        </Grid>
 
-        <DockPanel Grid.Row="1" LastChildFill="True">
+        <DockPanel Grid.Row="2" LastChildFill="True">
 
             <ScrollViewer Width="300" Margin="8 8 0 8" utilities:TopMouseScrollPriorityBehavior.TopMouseScrollPriority="True" DockPanel.Dock="Left" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel>
@@ -178,11 +194,11 @@
         <ui:Dialog
             x:Name="RootDialog"
             Grid.Row="0"
-            Grid.RowSpan="2"/>
+            Grid.RowSpan="3"/>
         
         <ui:Snackbar
             x:Name="RootSnackbar"
-            Grid.Row="1"
+            Grid.Row="2"
             MaxWidth="600"
             Appearance="Secondary"
             Icon="Alert48"
