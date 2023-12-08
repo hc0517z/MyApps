@@ -99,19 +99,7 @@
                             </ListView.ItemTemplate>
                         </ListView>
                     </Expander>
-
-                    <ui:CardExpander Margin="0 2" Icon="TagMultiple24" Visibility="Collapsed">
-                        <ui:CardExpander.Header>
-                            <TextBlock VerticalAlignment="Center" Text="Tags" />
-                        </ui:CardExpander.Header>
-                        <ListBox VerticalAlignment="Top" ItemsSource="{Binding Tags}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </ui:CardExpander>
+                    
                 </StackPanel>
             </ScrollViewer>
 

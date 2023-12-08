@@ -45,9 +45,6 @@ public partial class MainWindowViewModel : ObservableRecipient,
     
     private bool IsAllApps => GroupText.Contains("All");
 
-    [ObservableProperty]
-    private ObservableCollection<ObservableTag> _tags = new();
-
     public MainWindowViewModel(GroupService groupService, AppService appService, IDialogService dialogService, ISnackbarService snackbarService,
         ExplorerService explorerService, IThemeService themeService)
     {
@@ -61,13 +58,6 @@ public partial class MainWindowViewModel : ObservableRecipient,
         LoadAsync().ConfigureAwait(false);
 
         IsActive = true;
-        
-        Apps.CollectionChanged += AppsOnCollectionChanged;
-    }
-
-    private void AppsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        
     }
 
     public ObservableGroup SelectedGroup
