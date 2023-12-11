@@ -38,9 +38,11 @@ namespace MyApps
                     .AddTransient<ExplorerService>()
                     .AddSingleton<AppService>()
                     .AddSingleton<GroupService>()
+                    .AddTransient<DirectoryGroupService>()
                     .AddSingleton<MainWindowViewModel>()
                     .AddTransient<GroupViewModel>()
                     .AddTransient<AppViewModel>()
+                    .AddTransient<ExportViewModel>()
                     .BuildServiceProvider()
             );
 

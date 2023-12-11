@@ -35,6 +35,10 @@
                 <dialogsV:AppView />
             </DataTemplate>
             
+            <DataTemplate DataType="{x:Type dialogsVm:ExportViewModel}">
+                <dialogsV:ExportView />
+            </DataTemplate>
+            
         </ResourceDictionary>
     </Application.Resources>
 </Application>

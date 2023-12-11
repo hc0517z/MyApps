@@ -35,8 +35,8 @@
             
             <Menu Grid.Column="0">
                 <ui:MenuItem Header="File">
-                    <ui:MenuItem Header="Save directory group" SymbolIcon="DocumentArrowRight24"/>
-                    <ui:MenuItem Header="Load directory group" SymbolIcon="DocumentArrowLeft24"/>
+                    <ui:MenuItem Header="Export directory group" SymbolIcon="DocumentArrowRight24" Command="{Binding ExportCommand}"/>
+                    <ui:MenuItem Header="Import directory group" SymbolIcon="DocumentArrowLeft24" Command="{Binding ImportCommand}"/>
                 </ui:MenuItem>
                 <ui:MenuItem Header="Theme" Command="{Binding ChangeThemeCommand}" />
             </Menu>

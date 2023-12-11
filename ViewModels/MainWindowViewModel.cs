@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using MyApps.Messages;
 using MyApps.Models;
 using MyApps.Services;
@@ -27,6 +28,7 @@ public partial class MainWindowViewModel : ObservableRecipient,
     private readonly IDialogService _dialogService;
     private readonly ExplorerService _explorerService;
     private readonly GroupService _groupService;
+    private readonly DirectoryGroupService _directoryGroupService;
     private readonly ISnackbarService _snackbarService;
 
     [ObservableProperty]
@@ -46,7 +48,7 @@ public partial class MainWindowViewModel : ObservableRecipient,
     private bool IsAllApps => GroupText.Contains("All");
 
     public MainWindowViewModel(GroupService groupService, AppService appService, IDialogService dialogService, ISnackbarService snackbarService,
-        ExplorerService explorerService, IThemeService themeService)
+        ExplorerService explorerService, IThemeService themeService, DirectoryGroupService directoryGroupService)
     {
         _groupService = groupService;
         _appService = appService;
@@ -54,6 +56,7 @@ public partial class MainWindowViewModel : ObservableRecipient,
         _snackbarService = snackbarService;
         _explorerService = explorerService;
         _themeService = themeService;
+        _directoryGroupService = directoryGroupService;
 
         LoadAsync().ConfigureAwait(false);
 
@@ -101,7 +104,7 @@ public partial class MainWindowViewModel : ObservableRecipient,
         if (result != IDialogControl.ButtonPressed.Left) return;
 
         var group = message.Value;
-        var needToMoveApps = SelectedGroup.Id == group.Id;
+        var needToMoveApps = SelectedGroup?.Id == group.Id;
 
         Groups.Remove(group);
         await _groupService.DeleteGroupAsync(group.Id);
@@ -308,5 +311,65 @@ public partial class MainWindowViewModel : ObservableRecipient,
         _themeService.SetTheme(
             _themeService.GetTheme() == ThemeType.Dark ? ThemeType.Light : ThemeType.Dark
         );
+    }
+    
+    [RelayCommand]
+    private async Task OnExportAsync()
+    {
+        var dialog = GetDialogControl("Export", "Cancel");
+
+        dialog.Title = "Export";
+        dialog.Message = "Select a directory to export the apps.";
+        dialog.DialogHeight = 600;
+        dialog.DialogWidth = 800;
+
+        var exportViewModel = ViewModelLocator.Export;
+        dialog.Content = exportViewModel;
+
+        var result = await dialog.ShowAndWaitAsync();
+
+        if (result == IDialogControl.ButtonPressed.Left)
+        {
+            await _directoryGroupService.ExportAsync(exportViewModel.SelectedDirectoryGroup);
+            
+            await _snackbarService.ShowAsync("Exported", "Apps exported successfully.");
+        }
+    }
+
+    [RelayCommand]
+    private async Task OnImportAsync()
+    {
+        var dialog = new CommonOpenFileDialog();
+        dialog.Title = "Choose import file";
+
+        // json files
+        dialog.Filters.Add(new CommonFileDialogFilter("Json files", "*.json"));
+
+        if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+        {
+            var result = await _directoryGroupService.ImportAsync(dialog.FileName);
+            
+            var groupName = result.Key.Split('\\').Last();
+            var group = await _groupService.AddGroupAsync(groupName);
+            
+            foreach (var app in result.Value)
+            {
+                var newApp = new ObservableApp
+                {
+                    Name = app.Name,
+                    Path = Path.Combine(result.Key, app.RelativePath),
+                    GroupId = group.Id,
+                    Arguments = app.Arguments
+                };
+                await _appService.AddAppAsync(newApp);
+            }
+            
+            await LoadAsync();
+            
+            // select imported group
+            SelectedGroup = Groups.First(g => g.Id == group.Id);
+            
+            await _snackbarService.ShowAsync("Imported", "Apps imported successfully.");
+        }
     }
 }

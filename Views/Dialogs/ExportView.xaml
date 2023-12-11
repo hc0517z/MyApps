@@ -1,0 +1,67 @@
+﻿<UserControl x:Class="MyApps.Views.Dialogs.ExportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MyApps.Views.Dialogs"
+             xmlns:dialogs="clr-namespace:MyApps.ViewModels.Dialogs"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             mc:Ignorable="d"
+             HorizontalAlignment="Stretch"
+             d:DataContext="{d:DesignInstance dialogs:ExportViewModel}">
+    
+    <Grid Margin="8 16">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        <ComboBox Grid.Row="0" ItemsSource="{Binding DirectoryGroups}" SelectedItem="{Binding SelectedDirectoryGroup}" >
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Key}" />
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="0 0 8 0" FontSize="12" Foreground="{DynamicResource TextFillColorTertiaryBrush}" >
+                            <Run Text="{Binding Value.Count, Mode=OneWay}"/>
+                            <Run Text="apps"/>
+                        </TextBlock>    
+                    </Grid>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        
+        <ItemsControl Margin="0 8 0 0" Grid.Row="1" ItemsSource="{Binding SelectedDirectoryGroup.Value}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Expander Margin="0 2" Padding="8" VerticalAlignment="Center">
+                        <Expander.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <ui:SymbolIcon Grid.Column="0" Margin="0,0,8,0" VerticalAlignment="Center" Symbol="Apps48" />
+                                <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding Name}" />
+                            </Grid>
+                        </Expander.Header>
+                        <StackPanel>
+                            <TextBlock>
+                                <Run Text="Path: " />
+                                <Run Text="{Binding RelativePath}" />
+                            </TextBlock>
+                            <TextBlock>
+                                <Run Text="Arguments: " />
+                                <Run Text="{Binding Arguments}" />
+                            </TextBlock>
+                        </StackPanel>
+                    </Expander>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+    
+</UserControl>
