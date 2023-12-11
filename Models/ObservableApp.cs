@@ -14,7 +14,7 @@ public partial class ObservableApp : ObservableRecipient
     private string _arguments;
 
     [ObservableProperty]
-    private string _filePath;
+    private string _path;
 
     [ObservableProperty]
     private string _name;
@@ -26,7 +26,7 @@ public partial class ObservableApp : ObservableRecipient
         Id = app.Id;
         Name = app.Name;
         GroupId = app.GroupId;
-        FilePath = app.FilePath;
+        Path = app.Path;
         Arguments = app.Arguments;
 
         IsActive = true;
@@ -44,13 +44,13 @@ public partial class ObservableApp : ObservableRecipient
     {
         Name = other.Name;
         GroupId = other.GroupId;
-        FilePath = other.FilePath;
+        Path = other.Path;
         Arguments = other.Arguments;
     }
 
     public bool IsRunning => _process is { HasExited: false };
     
-    public bool IsBatch => FilePath.EndsWith(".bat", StringComparison.OrdinalIgnoreCase);
+    public bool IsBatch => Path.EndsWith(".bat", StringComparison.OrdinalIgnoreCase);
 
     [RelayCommand]
     private Task OnStart()
@@ -68,15 +68,15 @@ public partial class ObservableApp : ObservableRecipient
         if (IsBatch)
         {
             process.StartInfo.FileName = "cmd.exe";
-            process.StartInfo.Arguments = $"/c \"{FilePath}\"";
+            process.StartInfo.Arguments = $"/c \"{Path}\"";
         }
         else
         {
-            process.StartInfo.FileName = FilePath;
+            process.StartInfo.FileName = Path;
             process.StartInfo.Arguments = Arguments;
         }
         
-        process.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName(FilePath)!;
+        process.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName(Path)!;
         process.EnableRaisingEvents = true;
         
         process.Start();

@@ -30,7 +30,7 @@ public class AppService
     
     public async Task<ObservableApp> AddAppAsync(ObservableApp observableApp)
     {
-        var newApp = Domain.App.Create(observableApp.GroupId, observableApp.Name, observableApp.FilePath, observableApp.Arguments);
+        var newApp = Domain.App.Create(observableApp.GroupId, observableApp.Name, observableApp.Path, observableApp.Arguments);
         var app = await _appRepository.AddAsync(newApp);
         return new ObservableApp(app);
     }
@@ -45,7 +45,7 @@ public class AppService
         var app = await _appRepository.GetByIdAsync(observableApp.Id);
         app.GroupId = observableApp.GroupId;
         app.Name = observableApp.Name;
-        app.FilePath = observableApp.FilePath;
+        app.Path = observableApp.Path;
         app.Arguments = observableApp.Arguments;
         await _appRepository.UpdateAsync(app);
     }

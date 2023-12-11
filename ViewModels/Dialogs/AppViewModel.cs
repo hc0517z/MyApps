@@ -40,7 +40,7 @@ public partial class AppViewModel : ObservableObject
         }
     }
 
-    public bool IsEmptyFilePath => string.IsNullOrEmpty(App.FilePath);
+    public bool IsEmptyPath => string.IsNullOrEmpty(App.Path);
 
     public int SelectedGroupIndex
     {
@@ -79,19 +79,19 @@ public partial class AppViewModel : ObservableObject
 
         if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
         {
-            App.FilePath = dialog.FileName;
+            App.Path = dialog.FileName;
             App.Name = Path.GetFileNameWithoutExtension(dialog.FileName);
         }
 
-        OnPropertyChanged(nameof(IsEmptyFilePath));
+        OnPropertyChanged(nameof(IsEmptyPath));
     }
 
     [RelayCommand]
     private void OnDeletePath()
     {
-        App.FilePath = string.Empty;
+        App.Path = string.Empty;
 
-        OnPropertyChanged(nameof(IsEmptyFilePath));
+        OnPropertyChanged(nameof(IsEmptyPath));
     }
 
     [RelayCommand]

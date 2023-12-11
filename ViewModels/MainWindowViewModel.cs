@@ -182,7 +182,7 @@ public partial class MainWindowViewModel : ObservableRecipient,
     public void Receive(OpenDirectoryAppMessage message)
     {
         var app = message.Value;
-        var directoryName = Path.GetDirectoryName(app.FilePath);
+        var directoryName = Path.GetDirectoryName(app.Path);
         _explorerService.Open(directoryName);
     }
 

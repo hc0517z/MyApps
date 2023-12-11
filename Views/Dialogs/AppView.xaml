@@ -17,14 +17,14 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         
-        <ui:Button Margin="8" Grid.Row="0" Content="Choose app" Command="{Binding ChooseFileCommand}" Visibility="{Binding IsEmptyFilePath, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Stretch"/>
+        <ui:Button Margin="8" Grid.Row="0" Content="Choose app" Command="{Binding ChooseFileCommand}" Visibility="{Binding IsEmptyPath, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Stretch"/>
         
-        <Grid Margin="8" Grid.Row="0" Visibility="{Binding IsEmptyFilePath, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+        <Grid Margin="8" Grid.Row="0" Visibility="{Binding IsEmptyPath, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Margin="4 0" Grid.Column="0" VerticalAlignment="Center" Text="{Binding App.FilePath}" TextWrapping="Wrap"/>
+            <TextBlock Margin="4 0" Grid.Column="0" VerticalAlignment="Center" Text="{Binding App.Path}" TextWrapping="Wrap"/>
             <ui:Button Grid.Column="1" Padding="10" Icon="Dismiss48" Command="{Binding DeletePathCommand}"/>
         </Grid>
         
