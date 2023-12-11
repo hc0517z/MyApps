@@ -24,6 +24,10 @@
         <Resource Include="Assets\Fonts\KoPubWorld Dotum_Pro Bold.otf"/>
         <Resource Include="Assets\Fonts\KoPubWorld Dotum_Pro Light.otf"/>
         <Resource Include="Assets\Fonts\KoPubWorld Dotum_Pro Medium.otf"/>
+        <None Remove="icon.ico" />
+        <Resource Include="icon.ico">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Resource>
     </ItemGroup>
 
 </Project>

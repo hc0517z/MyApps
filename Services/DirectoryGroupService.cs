@@ -55,17 +55,17 @@ public class DirectoryGroupService
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, WriteIndented = true, Converters = { new JsonStringEnumConverter() }
         };
         
-        var json = JsonSerializer.Serialize(target, jsonSerializerOptions);
+        var json = JsonSerializer.Serialize(target.Value, jsonSerializerOptions);
         var directory = target.Key;
         var fileName = $"{directory.Split('\\').Last()}.json";
         
         return File.WriteAllTextAsync(Path.Combine(directory, fileName), json);
     }
     
-    public async Task<KeyValuePair<string, ObservableCollection<RelativeApp>>> ImportAsync(string filePath)
+    public async Task<ObservableCollection<RelativeApp>> ImportAsync(string filePath)
     {
         var jsonSerializerOptions = new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } };
         var json = await File.ReadAllTextAsync(filePath);
-        return JsonSerializer.Deserialize<KeyValuePair<string, ObservableCollection<RelativeApp>>>(json, jsonSerializerOptions);
+        return JsonSerializer.Deserialize<ObservableCollection<RelativeApp>>(json, jsonSerializerOptions);
     }
 }

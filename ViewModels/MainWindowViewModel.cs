@@ -350,7 +350,7 @@ public partial class MainWindowViewModel : ObservableRecipient,
         if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
         {
             var importResult = await _directoryGroupService.ImportAsync(dialog.FileName);
-            var group = await ImportGroupAndApps(importResult);
+            var group = await ImportGroupAndApps(dialog.FileName, importResult);
             
             await LoadAsync();
             
@@ -361,17 +361,20 @@ public partial class MainWindowViewModel : ObservableRecipient,
         }
     }
 
-    private async Task<Group> ImportGroupAndApps(KeyValuePair<string, ObservableCollection<RelativeApp>> importResult)
+    private async Task<Group> ImportGroupAndApps(string fileName, ObservableCollection<RelativeApp> importResult)
     {
-        var groupName = importResult.Key.Split('\\').Last();
+        var directory = Path.GetDirectoryName(fileName);
+        if (directory == null) return null;
+        
+        var groupName = directory.Split('\\').Last();
         var group = await _groupService.AddGroupAsync(groupName);
             
-        foreach (var app in importResult.Value)
+        foreach (var app in importResult)
         {
             var newApp = new ObservableApp
             {
                 Name = app.Name,
-                Path = Path.Combine(importResult.Key, app.RelativePath),
+                Path = Path.Combine(directory, app.RelativePath),
                 GroupId = group.Id,
                 Arguments = app.Arguments
             };

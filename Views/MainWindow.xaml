@@ -25,7 +25,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <ui:TitleBar Title="My Apps" Grid.Row="0" FontFamily="{StaticResource KoPubDotumMedium}" FontSize="14" />
+        <ui:TitleBar Title="My Apps" Grid.Row="0" VerticalAlignment="Center" VerticalContentAlignment="Center" FontFamily="{StaticResource KoPubDotumMedium}" FontSize="14" Icon="../icon.ico" />
         
         <Grid Grid.Row="1" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
