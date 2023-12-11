@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -7,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using MyApps.Domain;
 using MyApps.Messages;
 using MyApps.Models;
 using MyApps.Services;
@@ -347,22 +349,8 @@ public partial class MainWindowViewModel : ObservableRecipient,
 
         if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
         {
-            var result = await _directoryGroupService.ImportAsync(dialog.FileName);
-            
-            var groupName = result.Key.Split('\\').Last();
-            var group = await _groupService.AddGroupAsync(groupName);
-            
-            foreach (var app in result.Value)
-            {
-                var newApp = new ObservableApp
-                {
-                    Name = app.Name,
-                    Path = Path.Combine(result.Key, app.RelativePath),
-                    GroupId = group.Id,
-                    Arguments = app.Arguments
-                };
-                await _appService.AddAppAsync(newApp);
-            }
+            var importResult = await _directoryGroupService.ImportAsync(dialog.FileName);
+            var group = await ImportGroupAndApps(importResult);
             
             await LoadAsync();
             
@@ -371,5 +359,25 @@ public partial class MainWindowViewModel : ObservableRecipient,
             
             await _snackbarService.ShowAsync("Imported", "Apps imported successfully.");
         }
+    }
+
+    private async Task<Group> ImportGroupAndApps(KeyValuePair<string, ObservableCollection<RelativeApp>> importResult)
+    {
+        var groupName = importResult.Key.Split('\\').Last();
+        var group = await _groupService.AddGroupAsync(groupName);
+            
+        foreach (var app in importResult.Value)
+        {
+            var newApp = new ObservableApp
+            {
+                Name = app.Name,
+                Path = Path.Combine(importResult.Key, app.RelativePath),
+                GroupId = group.Id,
+                Arguments = app.Arguments
+            };
+            await _appService.AddAppAsync(newApp);
+        }
+
+        return group;
     }
 }

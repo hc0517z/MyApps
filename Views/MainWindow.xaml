@@ -191,6 +191,6 @@
             Appearance="Secondary"
             Icon="Alert48"
             CloseButtonEnabled="True"
-            Timeout="5000" />
+            Timeout="3000" />
     </Grid>
 </ui:UiWindow>

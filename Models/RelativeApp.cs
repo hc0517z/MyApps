@@ -1,6 +1,9 @@
-﻿namespace MyApps.Models;
+﻿using System.Collections.Generic;
+using MyApps.Infrastructure;
 
-public class RelativeApp
+namespace MyApps.Models;
+
+public class RelativeApp : ValueObject
 {
     public string Name { get; set; } = string.Empty;
     public string RelativePath { get; set; } = string.Empty;
@@ -14,5 +17,12 @@ public class RelativeApp
             RelativePath = relativePath,
             Arguments = arguments
         };
+    }
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Name;
+        yield return RelativePath;
+        yield return Arguments;
     }
 }
