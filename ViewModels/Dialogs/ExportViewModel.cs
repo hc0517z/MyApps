@@ -38,6 +38,6 @@ public class ExportViewModel : ObservableObject
 
     private async Task Initialize()
     {
-        DirectoryGroups = await _directoryGroupService.GetDirectoryGroups();
+        DirectoryGroups = await _directoryGroupService.RetrieveDirectoryGroups();
     }
 }

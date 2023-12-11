@@ -12,6 +12,7 @@ namespace MyApps.Services;
 
 public class DirectoryGroupService
 {
+    
     private readonly AppService _appService;
 
     public DirectoryGroupService(AppService appService)
@@ -19,36 +20,41 @@ public class DirectoryGroupService
         _appService = appService;
     }
 
-    public async Task<DirectoryGroups> GetDirectoryGroups()
+    public async Task<DirectoryGroups> RetrieveDirectoryGroups()
     {
-        var apps = (await _appService.GetAppsAsync()).ToList();
-        var findCommonMiddlePaths = FindAllDirectories(apps.Select(app => app.Path).ToList()).Distinct();
+        var applications = (await _appService.GetAppsAsync()).ToList();
+        var commonDirectories = DiscoverAllDirectories(applications.Select(app => app.Path).ToList()).Distinct();
 
         DirectoryGroups directoryGroups = new();
 
-        foreach (var commonMiddlePath in findCommonMiddlePaths)
+        foreach (var commonDirectory in commonDirectories)
         {
-            var appsInDirectory = apps.Where(app => app.Path.StartsWith(commonMiddlePath)).ToList();
-            foreach (var app in appsInDirectory) directoryGroups.AddApp(commonMiddlePath, app.Name, app.Path, app.Arguments);
+            AddApplicationsToGroup(commonDirectory, applications, directoryGroups);
         }
 
         return directoryGroups;
     }
 
-    private IEnumerable<string> FindAllDirectories(IReadOnlyCollection<string> filePaths)
+    private void AddApplicationsToGroup(string commonDirectory, IEnumerable<ObservableApp> applications, DirectoryGroups directoryGroups)
     {
-        // 모든 디렉토리의 경우의 수를 구한다.
-        var allDirectories = filePaths
-            .SelectMany(filePath => filePath.Split('\\').Select((_, index) => string.Join('\\', filePath.Split('\\').Take(index + 1)))).Distinct()
-            .ToList();
+        var applicationsInDirectory = applications.Where(app => app.Path.StartsWith(commonDirectory)).ToList();
+        foreach (var app in applicationsInDirectory)
+            directoryGroups.AddApp(commonDirectory, app.Name, app.Path, app.Arguments);
+    }
 
-        // 파일 경로는 제외한다.
+    private IEnumerable<string> DiscoverAllDirectories(IReadOnlyCollection<string> filePaths)
+    {
+        var splitFileDirectories = filePaths.Select(path => path.Split('\\')).ToList();
+        var allDirectories = splitFileDirectories
+             .SelectMany(splitDirectory =>
+                splitDirectory.Select((_, index) => string.Join('\\', splitDirectory.Take(index + 1))))
+            .Distinct().ToList();        
         var directories = allDirectories.Where(directory => !filePaths.Contains(directory)).ToList();
 
         return directories;
     }
 
-    public Task ExportAsync(KeyValuePair<string, ObservableCollection<RelativeApp>> target)
+    public Task ExportGroupAsync(KeyValuePair<string, ObservableCollection<RelativeApp>> target)
     {
         var jsonSerializerOptions = new JsonSerializerOptions
         {
@@ -62,7 +68,7 @@ public class DirectoryGroupService
         return File.WriteAllTextAsync(Path.Combine(directory, fileName), json);
     }
     
-    public async Task<ObservableCollection<RelativeApp>> ImportAsync(string filePath)
+    public async Task<ObservableCollection<RelativeApp>> ImportGroupAsync(string filePath)
     {
         var jsonSerializerOptions = new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } };
         var json = await File.ReadAllTextAsync(filePath);

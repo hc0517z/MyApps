@@ -332,7 +332,7 @@ public partial class MainWindowViewModel : ObservableRecipient,
 
         if (result == IDialogControl.ButtonPressed.Left)
         {
-            await _directoryGroupService.ExportAsync(exportViewModel.SelectedDirectoryGroup);
+            await _directoryGroupService.ExportGroupAsync(exportViewModel.SelectedDirectoryGroup);
             
             await _snackbarService.ShowAsync("Exported", "Apps exported successfully.");
         }
@@ -349,7 +349,7 @@ public partial class MainWindowViewModel : ObservableRecipient,
 
         if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
         {
-            var importResult = await _directoryGroupService.ImportAsync(dialog.FileName);
+            var importResult = await _directoryGroupService.ImportGroupAsync(dialog.FileName);
             var group = await ImportGroupAndApps(dialog.FileName, importResult);
             
             await LoadAsync();
