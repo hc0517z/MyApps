@@ -14,10 +14,10 @@ public partial class ObservableApp : ObservableRecipient
     private string _arguments;
 
     [ObservableProperty]
-    private string _path;
+    private string _name;
 
     [ObservableProperty]
-    private string _name;
+    private string _path;
 
     private Process _process;
 
@@ -39,7 +39,11 @@ public partial class ObservableApp : ObservableRecipient
 
     public Guid Id { get; }
     public Guid? GroupId { get; set; }
-    
+
+    public bool IsRunning => _process is { HasExited: false };
+
+    public bool IsBatch => Path.EndsWith(".bat", StringComparison.OrdinalIgnoreCase);
+
     public void Update(ObservableApp other)
     {
         Name = other.Name;
@@ -47,10 +51,6 @@ public partial class ObservableApp : ObservableRecipient
         Path = other.Path;
         Arguments = other.Arguments;
     }
-
-    public bool IsRunning => _process is { HasExited: false };
-    
-    public bool IsBatch => Path.EndsWith(".bat", StringComparison.OrdinalIgnoreCase);
 
     [RelayCommand]
     private Task OnStart()
@@ -66,21 +66,27 @@ public partial class ObservableApp : ObservableRecipient
         var process = new Process();
 
         if (IsBatch)
-        {
-            process.StartInfo.FileName = "cmd.exe";
-            process.StartInfo.Arguments = $"/c \"{Path}\"";
-        }
+            ConfigureForBatchProcessing(process);
         else
-        {
-            process.StartInfo.FileName = Path;
-            process.StartInfo.Arguments = Arguments;
-        }
-        
+            ConfigureForGeneralProcessing(process);
+
         process.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName(Path)!;
         process.EnableRaisingEvents = true;
-        
+
         process.Start();
         return process;
+    }
+
+    private void ConfigureForBatchProcessing(Process process)
+    {
+        process.StartInfo.FileName = "cmd.exe";
+        process.StartInfo.Arguments = $"/c \"{Path}\"";
+    }
+
+    private void ConfigureForGeneralProcessing(Process process)
+    {
+        process.StartInfo.FileName = Path;
+        process.StartInfo.Arguments = Arguments;
     }
 
     [RelayCommand]
@@ -97,7 +103,7 @@ public partial class ObservableApp : ObservableRecipient
         _process = null;
         OnPropertyChanged(nameof(IsRunning));
     }
-    
+
     [RelayCommand]
     private void OnEdit()
     {
@@ -109,7 +115,7 @@ public partial class ObservableApp : ObservableRecipient
     {
         Messenger.Send(new OpenDirectoryAppMessage(this));
     }
-    
+
     [RelayCommand]
     private void OnDelete()
     {
