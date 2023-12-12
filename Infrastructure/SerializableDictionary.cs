@@ -5,92 +5,96 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace MyApps.Infrastructure
+namespace MyApps.Infrastructure;
+
+[XmlRoot("dictionary")]
+[Serializable]
+public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IXmlSerializable
 {
-    [XmlRoot("dictionary")]
-    [Serializable]
-    public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IXmlSerializable
+    public SerializableDictionary()
     {
-        public SerializableDictionary()
+    }
+
+    public SerializableDictionary(int capacity) : base(capacity)
+    {
+    }
+
+    public SerializableDictionary(IEqualityComparer<TKey> comparer) : base(comparer)
+    {
+    }
+
+    public SerializableDictionary(int capacity, IEqualityComparer<TKey> comparer) : base(capacity, comparer)
+    {
+    }
+
+    public SerializableDictionary(IDictionary<TKey, TValue> dictionary) : base(dictionary)
+    {
+    }
+
+    public SerializableDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey> comparer) : base(dictionary, comparer)
+    {
+    }
+
+    protected SerializableDictionary(SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
+
+    public XmlSchema GetSchema()
+    {
+        return null;
+    }
+
+    public void ReadXml(XmlReader reader)
+    {
+        var wasEmpty = reader.IsEmptyElement;
+        reader.Read();
+        if (wasEmpty) return;
+
+        while (reader.NodeType != XmlNodeType.EndElement)
         {
-        }
-
-        public SerializableDictionary(int capacity) : base(capacity)
-        {
-        }
-
-        public SerializableDictionary(IEqualityComparer<TKey> comparer) : base(comparer)
-        {
-        }
-
-        public SerializableDictionary(int capacity, IEqualityComparer<TKey> comparer) : base(capacity, comparer)
-        {
-        }
-
-        public SerializableDictionary(IDictionary<TKey, TValue> dictionary) : base(dictionary)
-        {
-        }
-
-        public SerializableDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey> comparer) : base(dictionary, comparer)
-        {
-        }
-
-        protected SerializableDictionary(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
-
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
-
-        public void ReadXml(XmlReader reader)
-        {
-            var keySerializer = new XmlSerializer(typeof(TKey));
-            var valueSerializer = new XmlSerializer(typeof(TValue));
-            var wasEmpty = reader.IsEmptyElement;
-            reader.Read();
-            if (wasEmpty)
-            {
-                return;
-            }
-
-            while (reader.NodeType != XmlNodeType.EndElement)
-            {
-                reader.ReadStartElement("item");
-                reader.ReadStartElement("key");
-                var key = (TKey)keySerializer.Deserialize(reader);
-                reader.ReadEndElement();
-                reader.ReadStartElement("value");
-                var value = (TValue)valueSerializer.Deserialize(reader);
-                reader.ReadEndElement();
-                Add(key, value);
-                reader.ReadEndElement();
-                reader.MoveToContent();
-            }
-
+            reader.ReadStartElement("item");
+            var key = XmlDeserializer<TKey>(reader, "key");
+            var value = XmlDeserializer<TValue>(reader, "value");
+            Add(key, value);
             reader.ReadEndElement();
+            reader.MoveToContent();
         }
 
-        public void WriteXml(XmlWriter writer)
+        reader.ReadEndElement();
+    }
+
+    public void WriteXml(XmlWriter writer)
+    {
+        var emptyNamespaces = new XmlSerializerNamespaces();
+        emptyNamespaces.Add("", "any-non-empty-string");
+
+        foreach (var key in Keys)
         {
-            var keySerializer = new XmlSerializer(typeof(TKey));
-            var valueSerializer = new XmlSerializer(typeof(TValue));
-
-            var emptyNamespaces = new XmlSerializerNamespaces();
-            emptyNamespaces.Add("", "any-non-empty-string");
-            foreach (var key in Keys)
-            {
-                writer.WriteStartElement("item");
-                writer.WriteStartElement("key");
-                keySerializer.Serialize(writer, key, emptyNamespaces);
-                writer.WriteEndElement();
-                writer.WriteStartElement("value");
-                var value = this[key];
-                valueSerializer.Serialize(writer, value, emptyNamespaces);
-                writer.WriteEndElement();
-                writer.WriteEndElement();
-            }
+            var value = this[key];
+            writer.WriteStartElement("item");
+            XmlSerializer(writer, "key", key, emptyNamespaces);
+            XmlSerializer(writer, "value", value, emptyNamespaces);
+            writer.WriteEndElement();
         }
+    }
+
+    private static T XmlDeserializer<T>(XmlReader reader, string elementName)
+    {
+        var serializer = new XmlSerializer(typeof(T));
+
+        reader.ReadStartElement(elementName);
+        var value = (T)serializer.Deserialize(reader);
+        reader.ReadEndElement();
+
+        return value;
+    }
+
+    private static void XmlSerializer<T>(XmlWriter writer, string elementName, T value, XmlSerializerNamespaces namespaces)
+    {
+        var serializer = new XmlSerializer(typeof(T));
+
+        writer.WriteStartElement(elementName);
+        serializer.Serialize(writer, value, namespaces);
+        writer.WriteEndElement();
     }
 }
