@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -26,12 +25,12 @@ public partial class MainWindowViewModel : ObservableRecipient,
     IRecipient<DeleteGroupMessage>
 {
     private readonly AppService _appService;
-    private readonly IThemeService _themeService;
     private readonly IDialogService _dialogService;
+    private readonly DirectoryGroupService _directoryGroupService;
     private readonly ExplorerService _explorerService;
     private readonly GroupService _groupService;
-    private readonly DirectoryGroupService _directoryGroupService;
     private readonly ISnackbarService _snackbarService;
+    private readonly IThemeService _themeService;
 
     [ObservableProperty]
     private ObservableCollection<ObservableApp> _apps = new();
@@ -46,8 +45,6 @@ public partial class MainWindowViewModel : ObservableRecipient,
     private string _searchText;
 
     private ObservableGroup _selectedGroup;
-    
-    private bool IsAllApps => GroupText.Contains("All");
 
     public MainWindowViewModel(GroupService groupService, AppService appService, IDialogService dialogService, ISnackbarService snackbarService,
         ExplorerService explorerService, IThemeService themeService, DirectoryGroupService directoryGroupService)
@@ -64,6 +61,8 @@ public partial class MainWindowViewModel : ObservableRecipient,
 
         IsActive = true;
     }
+
+    private bool IsAllApps => GroupText.Contains("All");
 
     public ObservableGroup SelectedGroup
     {
@@ -102,7 +101,8 @@ public partial class MainWindowViewModel : ObservableRecipient,
     {
         var dialog = GetDialogControl("Delete", "Cancel");
         dialog.Content = null;
-        var result = await dialog.ShowAndWaitAsync("Delete Group", $@"Are you sure you want to delete this group?{Environment.NewLine}Apps in this group will be moved to Ungrouped Apps.");
+        var result = await dialog.ShowAndWaitAsync("Delete Group",
+            $@"Are you sure you want to delete this group?{Environment.NewLine}Apps in this group will be moved to Ungrouped Apps.");
         if (result != IDialogControl.ButtonPressed.Left) return;
 
         var group = message.Value;
@@ -143,7 +143,7 @@ public partial class MainWindowViewModel : ObservableRecipient,
         if (result == IDialogControl.ButtonPressed.Left)
         {
             await _appService.UpdateAppAsync(appViewModel.App);
-            
+
             if (!IsAllApps) await GetAppsByGroupIdAsync(SelectedGroup?.Id);
 
             RefreshGroupsProperties();
@@ -211,6 +211,8 @@ public partial class MainWindowViewModel : ObservableRecipient,
         var apps = await _appService.GetAppsAsync();
         Apps.Clear();
         foreach (var app in apps) Apps.Add(app);
+
+        SearchText = string.Empty;
     }
 
     private async Task GetAppsByGroupIdAsync(Guid? groupId)
@@ -218,6 +220,8 @@ public partial class MainWindowViewModel : ObservableRecipient,
         var apps = await _appService.GetAppsByGroupIdAsync(groupId);
         Apps.Clear();
         foreach (var app in apps) Apps.Add(app);
+
+        SearchText = string.Empty;
     }
 
     [RelayCommand]
@@ -229,6 +233,8 @@ public partial class MainWindowViewModel : ObservableRecipient,
 
         SelectedGroup = null;
         GroupText = "All apps";
+
+        SearchText = string.Empty;
     }
 
     [RelayCommand]
@@ -241,8 +247,19 @@ public partial class MainWindowViewModel : ObservableRecipient,
     }
 
     [RelayCommand]
-    private void OnSearch()
+    private async Task OnSearch()
     {
+        if (!string.IsNullOrWhiteSpace(SearchText))
+        {
+            var searchLowered = SearchText.Trim().ToLowerInvariant();
+            var results = Apps.Where(a => a.Name.ToLowerInvariant().Contains(searchLowered)).ToList();
+            Apps = new ObservableCollection<ObservableApp>(results);
+        }
+        else
+        {
+            if (!IsAllApps) await GetAppsByGroupIdAsync(SelectedGroup.Id);
+            await LoadAsync();
+        }
     }
 
     [RelayCommand]
@@ -299,22 +316,22 @@ public partial class MainWindowViewModel : ObservableRecipient,
     {
         foreach (var group in Groups) group.RaisePropertiesChanged();
     }
-    
-    
+
+
     [RelayCommand]
     private async Task ChangeTheme()
     {
         var dialog = GetDialogControl("Change", "Cancel");
-        
+
         var result = await dialog.ShowAndWaitAsync("Change Theme", "Are you sure you want to change the theme?");
-        
+
         if (result != IDialogControl.ButtonPressed.Left) return;
-        
+
         _themeService.SetTheme(
             _themeService.GetTheme() == ThemeType.Dark ? ThemeType.Light : ThemeType.Dark
         );
     }
-    
+
     [RelayCommand]
     private async Task OnExportAsync()
     {
@@ -333,7 +350,7 @@ public partial class MainWindowViewModel : ObservableRecipient,
         if (result == IDialogControl.ButtonPressed.Left)
         {
             await _directoryGroupService.ExportGroupAsync(exportViewModel.SelectedDirectoryGroup);
-            
+
             await _snackbarService.ShowAsync("Exported", "Apps exported successfully.");
         }
     }
@@ -351,12 +368,12 @@ public partial class MainWindowViewModel : ObservableRecipient,
         {
             var importResult = await _directoryGroupService.ImportGroupAsync(dialog.FileName);
             var group = await ImportGroupAndApps(dialog.FileName, importResult);
-            
+
             await LoadAsync();
-            
+
             // select imported group
             SelectedGroup = Groups.First(g => g.Id == group.Id);
-            
+
             await _snackbarService.ShowAsync("Imported", "Apps imported successfully.");
         }
     }
@@ -365,10 +382,10 @@ public partial class MainWindowViewModel : ObservableRecipient,
     {
         var directory = Path.GetDirectoryName(fileName);
         if (directory == null) return null;
-        
+
         var groupName = directory.Split('\\').Last();
         var group = await _groupService.AddGroupAsync(groupName);
-            
+
         foreach (var app in importResult)
         {
             var newApp = new ObservableApp
