@@ -72,7 +72,7 @@
                             </ListView.Resources>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid Margin="8">
+                                    <Grid Margin="8 4">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition />
