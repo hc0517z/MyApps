@@ -33,3 +33,4 @@ MyApps is a software designed to streamline the execution of programs on Windows
 - WPF (Windows Presentation Foundation)
 - CommunityToolkit.Mvvm (Version 8.2.1)
 - WPF-UI (Version 2.1.0)
+- gong-wpf-dragdrop (Version 3.2.1)

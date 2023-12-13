@@ -22,7 +22,8 @@ public partial class MainWindowViewModel : ObservableRecipient,
     IRecipient<OpenDirectoryAppMessage>,
     IRecipient<DeleteAppMessage>,
     IRecipient<EditGroupMessage>,
-    IRecipient<DeleteGroupMessage>
+    IRecipient<DeleteGroupMessage>,
+    IRecipient<RefreshMessage>
 {
     private readonly AppService _appService;
     private readonly IDialogService _dialogService;
@@ -191,6 +192,13 @@ public partial class MainWindowViewModel : ObservableRecipient,
         _explorerService.Open(directoryName);
     }
 
+    public async void Receive(RefreshMessage message)
+    {
+        if (!IsAllApps) await GetAppsByGroupIdAsync(SelectedGroup?.Id);
+        else await LoadAsync();
+        RefreshGroupsProperties();
+    }
+
     private IDialogControl GetDialogControl(string leftButtonName, string rightButtonName)
     {
         var dialog = _dialogService.GetDialogControl();
@@ -257,8 +265,8 @@ public partial class MainWindowViewModel : ObservableRecipient,
         }
         else
         {
-            if (!IsAllApps) await GetAppsByGroupIdAsync(SelectedGroup.Id);
-            await LoadAsync();
+            if (!IsAllApps) await GetAppsByGroupIdAsync(SelectedGroup?.Id);
+            else await LoadAsync();
         }
     }
 

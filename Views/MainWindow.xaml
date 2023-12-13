@@ -7,6 +7,7 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:utilities="clr-namespace:MyApps.Utilities"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:dd="urn:gong-wpf-dragdrop"
     Title="MainWindow"
     Width="800"
     Height="800"
@@ -61,10 +62,10 @@
                                 <ui:Button Grid.Column="2" Margin="0 0 8 0" Padding="4" Command="{Binding AddGroupCommand}" Icon="Add48" />
                             </Grid>
                         </Expander.Header>
-                        <ListView VerticalAlignment="Top" ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}">
+                        <ListView VerticalAlignment="Top" ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}" >
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid Margin="8">
+                                    <Grid Margin="8" dd:DragDrop.IsDropTarget="True" dd:DragDrop.DropHandler="{Binding}" >
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition />
@@ -138,7 +139,7 @@
                     <ItemsControl ItemsSource="{Binding Apps}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <ui:CardAction Margin="0 2" Icon="Apps48" IsChevronVisible="False">
+                                <ui:CardAction Margin="0 2" Icon="Apps48" IsChevronVisible="False" dd:DragDrop.IsDragSource="True">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition />
