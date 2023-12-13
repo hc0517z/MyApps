@@ -62,10 +62,17 @@
                                 <ui:Button Grid.Column="2" Margin="0 0 8 0" Padding="4" Command="{Binding AddGroupCommand}" Icon="Add48" />
                             </Grid>
                         </Expander.Header>
-                        <ListView VerticalAlignment="Top" ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}" >
+                        <ListView VerticalAlignment="Top" ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}">
+                            <ListView.Resources>
+                                <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
+                                <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource DefaultListViewItemStyle}">  
+                                    <Setter Property="dd:DragDrop.IsDropTarget" Value="True" />  
+                                    <Setter Property="dd:DragDrop.DropHandler" Value="{Binding }" />  
+                                </Style> 
+                            </ListView.Resources>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid Margin="8" dd:DragDrop.IsDropTarget="True" dd:DragDrop.DropHandler="{Binding}" >
+                                    <Grid Margin="8">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition />
