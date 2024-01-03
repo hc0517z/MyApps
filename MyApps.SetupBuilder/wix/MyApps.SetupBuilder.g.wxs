@@ -6,7 +6,7 @@
 </auto-generated>
 -->
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="6f330b47-2577-43ad-0517-1861ca25889d" Name="MyApps" Language="1033" Codepage="Windows-1252" Version="1.0.0.1" UpgradeCode="6f330b47-2577-43ad-0517-1861ba25889b" Manufacturer="KimHC">
+  <Product Id="6f330b47-2577-43ad-0517-1861ca25889c" Name="MyApps" Language="1033" Codepage="Windows-1252" Version="1.0.0.0" UpgradeCode="6f330b47-2577-43ad-0517-1861ba25889b" Manufacturer="KimHC">
     <Package InstallerVersion="200" Compressed="yes" SummaryCodepage="Windows-1252" Languages="1033" />
     <Media Id="1" Cabinet="MyApps.cab" EmbedCab="yes" />
 
@@ -152,8 +152,32 @@
               </RegistryKey>
             </Component>
 
+            <Component Id="Component.MyApps.deps.json_3426106203" Guid="6f330b47-2577-43ad-0517-186113fdd909">
+              <File Id="MyApps.deps.json_3426106203" Source="..\MyApps\bin\Release\net6.0-windows\MyApps.deps.json" />
+
+              <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                <RegistryValue Value="0" Type="string" KeyPath="yes" />
+              </RegistryKey>
+            </Component>
+
+            <Component Id="Component.MyApps.dll_674051188" Guid="6f330b47-2577-43ad-0517-1861ded4a7a0">
+              <File Id="MyApps.dll_674051188" Source="..\MyApps\bin\Release\net6.0-windows\MyApps.dll" />
+
+              <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                <RegistryValue Value="0" Type="string" KeyPath="yes" />
+              </RegistryKey>
+            </Component>
+
             <Component Id="Component.MyApps.exe_3047490614" Guid="6f330b47-2577-43ad-0517-1861d2845311">
               <File Id="MyApps.exe_3047490614" Source="..\MyApps\bin\Release\net6.0-windows\MyApps.exe" />
+
+              <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
+                <RegistryValue Value="0" Type="string" KeyPath="yes" />
+              </RegistryKey>
+            </Component>
+
+            <Component Id="Component.MyApps.runtimeconfig.json_2959607900" Guid="6f330b47-2577-43ad-0517-18611ee2ce37">
+              <File Id="MyApps.runtimeconfig.json_2959607900" Source="..\MyApps\bin\Release\net6.0-windows\MyApps.runtimeconfig.json" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
                 <RegistryValue Value="0" Type="string" KeyPath="yes" />
@@ -321,7 +345,10 @@
       <ComponentRef Id="Component.Microsoft.WindowsAPICodePack.dll_455227327" />
       <ComponentRef Id="Component.Microsoft.WindowsAPICodePack.Shell.dll_572673556" />
       <ComponentRef Id="Component.Microsoft.Xaml.Behaviors.dll_722683353" />
+      <ComponentRef Id="Component.MyApps.deps.json_3426106203" />
+      <ComponentRef Id="Component.MyApps.dll_674051188" />
       <ComponentRef Id="Component.MyApps.exe_3047490614" />
+      <ComponentRef Id="Component.MyApps.runtimeconfig.json_2959607900" />
       <ComponentRef Id="Component.System.Drawing.Common.dll_1522865389" />
       <ComponentRef Id="Component.Wpf.Ui.dll_3471448101" />
       <ComponentRef Id="Component.MyApps__" />

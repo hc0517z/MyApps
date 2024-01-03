@@ -8,14 +8,15 @@ namespace MyApps.SetupBuilder
     {
         private static void Main()
         {
-            var version = "1.0.0.1";
+            const string version = "1.0.0.0";
+            
             var project = new Project("MyApps",
                 new Dir(@"%LocalAppDataFolder%\Programs\MyApps",
                     new Files(@"..\MyApps\bin\Release\net6.0-windows\*.*", f =>
                         f.EndsWith(".exe") ||
                         f.EndsWith(".dll") ||
-                        f.EndsWith(".deps.json") ||
-                        f.EndsWith("runtimeconfig.json")),
+                        f.Contains(".deps.json") ||
+                        f.Contains("runtimeconfig.json")),
                     new Dir(@"%ProgramMenu%\MyApps",
                         new ExeFileShortcut("MyApps", Path.Combine("[INSTALLDIR]", "MyApps.exe"), ""),
                         new ExeFileShortcut("Uninstall MyApps", "[System64Folder]msiexec.exe", "/x [ProductCode]")),
