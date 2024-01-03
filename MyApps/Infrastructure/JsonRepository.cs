@@ -13,7 +13,8 @@ public abstract class JsonRepository<T> : MemoryRepository<T> where T : Entity
 
     protected JsonRepository(string filePath)
     {
-        _filePath = filePath;
+        // 프로그램 실행 파일이 있는 폴더의 경로를 가져온다.
+        _filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filePath);
         EnsureFilePath();
         Load();
     }
