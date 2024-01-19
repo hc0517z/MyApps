@@ -6,6 +6,7 @@ namespace MyApps.Domain;
 public class App : Entity
 {
     public Guid? GroupId { get; set; }
+    public int Index { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Path { get; set; } = string.Empty;
     public string Arguments { get; set; } = string.Empty;
@@ -20,11 +21,12 @@ public class App : Entity
         };
     }
 
-    public static App Create(Guid? groupId, string name, string filePath, string arguments)
+    public static App Create(Guid? groupId, int index, string name, string filePath, string arguments)
     {
         return new App
         {
             GroupId = groupId,
+            Index = index,
             Name = name,
             Path = filePath,
             Arguments = arguments

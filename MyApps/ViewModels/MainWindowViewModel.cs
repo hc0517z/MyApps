@@ -63,7 +63,10 @@ public partial class MainWindowViewModel : ObservableRecipient,
         IsActive = true;
     }
 
-    private bool IsAllApps => GroupText.Contains("All");
+    public AppsDropHandler AppsDropHandler { get; } = new();
+
+    public bool IsAllApps => GroupText.Contains("All");
+    public bool IsUngroupedApps => GroupText.Contains("Ungrouped");
 
     public ObservableGroup SelectedGroup
     {

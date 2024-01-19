@@ -14,6 +14,9 @@ public partial class ObservableApp : ObservableRecipient
     private string _arguments;
 
     [ObservableProperty]
+    private int _index;
+
+    [ObservableProperty]
     private string _name;
 
     [ObservableProperty]

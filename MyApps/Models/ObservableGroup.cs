@@ -61,11 +61,20 @@ public partial class ObservableGroup : ObservableRecipient, IDropTarget
 
     public async void Drop(IDropInfo dropInfo)
     {
+        var appService = Ioc.Default.GetRequiredService<AppService>();
         if (dropInfo.Data is ObservableApp srcApp)
         {
             srcApp.GroupId = Id;
-            var appService = Ioc.Default.GetRequiredService<AppService>();
+            srcApp.Index = await GetAppCount() + 1;
             await appService.UpdateAppAsync(srcApp);
+        }
+
+        var index = 0;
+        foreach (var app in await GetApps())
+        {
+            app.Index = index;
+            await appService.UpdateAppAsync(app);
+            index++;
         }
 
         Messenger.Send(new RefreshMessage(true));
