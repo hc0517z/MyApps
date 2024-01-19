@@ -6,7 +6,7 @@
 </auto-generated>
 -->
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="6f330b47-2577-43ad-0517-1861ca25889c" Name="MyApps" Language="1033" Codepage="Windows-1252" Version="1.0.0.0" UpgradeCode="6f330b47-2577-43ad-0517-1861ba25889b" Manufacturer="KimHC">
+  <Product Id="6f330b47-2577-43ad-0517-1861ca25889d" Name="MyApps" Language="1033" Codepage="Windows-1252" Version="1.0.0.1" UpgradeCode="6f330b47-2577-43ad-0517-1861ba25889b" Manufacturer="KimHC">
     <Package InstallerVersion="200" Compressed="yes" SummaryCodepage="Windows-1252" Languages="1033" />
     <Media Id="1" Cabinet="MyApps.cab" EmbedCab="yes" />
 
