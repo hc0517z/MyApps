@@ -1,4 +1,4 @@
-﻿using MyApps.Domain;
+﻿using MyApps.Entities;
 using MyApps.Infrastructure;
 
 namespace MyApps.Repositories;

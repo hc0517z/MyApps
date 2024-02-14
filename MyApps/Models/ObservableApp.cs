@@ -24,7 +24,7 @@ public partial class ObservableApp : ObservableRecipient
 
     private Process _process;
 
-    public ObservableApp(Domain.App app)
+    public ObservableApp(Entities.App app)
     {
         Id = app.Id;
         Name = app.Name;

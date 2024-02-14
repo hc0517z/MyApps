@@ -6,13 +6,13 @@ using MyApps.Infrastructure;
 
 namespace MyApps.Repositories;
 
-public class AppRepository : JsonRepository<Domain.App>
+public class AppRepository : JsonRepository<Entities.App>
 {
     public AppRepository(string filePath) : base(filePath)
     {
     }
 
-    public async Task<IEnumerable<Domain.App>> GetAppsByGroupIdAsync(Guid? groupId)
+    public async Task<IEnumerable<Entities.App>> GetAppsByGroupIdAsync(Guid? groupId)
     {
         var apps = await GetAllAsync();
         return apps.Where(app => app.GroupId == groupId);

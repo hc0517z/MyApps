@@ -50,7 +50,7 @@ public class AppService
     {
         var newIndex = await _appRepository.GetPossibleIndexAsync(observableApp.GroupId);
 
-        var newApp = Domain.App.Create(observableApp.GroupId, newIndex, observableApp.Name, observableApp.Path, observableApp.Arguments);
+        var newApp = Entities.App.Create(observableApp.GroupId, newIndex, observableApp.Name, observableApp.Path, observableApp.Arguments);
         var app = await _appRepository.AddAsync(newApp);
         var newObservableApp = new ObservableApp(app);
         _apps.Add(app.Id, newObservableApp);

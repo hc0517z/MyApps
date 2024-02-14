@@ -8,7 +8,7 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using GongSolutions.Wpf.DragDrop;
-using MyApps.Domain;
+using MyApps.Entities;
 using MyApps.Messages;
 using MyApps.Services;
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MyApps.Domain;
+using MyApps.Entities;
 using MyApps.Models;
 using MyApps.Repositories;
 

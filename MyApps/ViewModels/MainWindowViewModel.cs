@@ -7,7 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using MyApps.Domain;
+using MyApps.Entities;
 using MyApps.Messages;
 using MyApps.Models;
 using MyApps.Services;
