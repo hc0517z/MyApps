@@ -10,6 +10,7 @@ namespace MyApps.Services;
 public class AppService
 {
     private readonly AppRepository _appRepository;
+    private readonly Dictionary<Guid, ObservableApp> _apps = new();
 
     public AppService(AppRepository appRepository)
     {
@@ -18,15 +19,31 @@ public class AppService
 
     public async Task<ObservableApp> GetAppByIdAsync(Guid id)
     {
-        var app = await _appRepository.GetByIdAsync(id);
-        return new ObservableApp(app);
+        if (_apps.TryGetValue(id, out var app)) return app;
+
+        var findApp = await _appRepository.GetByIdAsync(id);
+        if (findApp is null) return null;
+
+        var observableApp = new ObservableApp(findApp);
+        _apps.Add(id, observableApp);
+        return observableApp;
     }
 
     public async Task<IEnumerable<ObservableApp>> GetAppsAsync()
     {
         var apps = await _appRepository.GetAllAsync();
         apps = apps.OrderBy(app => app.GroupId).ThenBy(app => app.Index);
-        return apps.Select(app => new ObservableApp(app));
+
+        var returnApps = apps.Select(app =>
+        {
+            if (_apps.TryGetValue(app.Id, out var findApp)) return findApp;
+
+            var observableApp = new ObservableApp(app);
+            _apps.Add(app.Id, observableApp);
+            return observableApp;
+        });
+
+        return returnApps;
     }
 
     public async Task<ObservableApp> AddAppAsync(ObservableApp observableApp)
@@ -35,12 +52,15 @@ public class AppService
 
         var newApp = Domain.App.Create(observableApp.GroupId, newIndex, observableApp.Name, observableApp.Path, observableApp.Arguments);
         var app = await _appRepository.AddAsync(newApp);
-        return new ObservableApp(app);
+        var newObservableApp = new ObservableApp(app);
+        _apps.Add(app.Id, newObservableApp);
+        return newObservableApp;
     }
 
     public async Task DeleteAppAsync(Guid id)
     {
         await _appRepository.DeleteAsync(id);
+        _apps.Remove(id);
     }
 
     public async Task UpdateAppAsync(ObservableApp observableApp)
@@ -58,6 +78,16 @@ public class AppService
     {
         var apps = await _appRepository.GetAppsByGroupIdAsync(groupId);
         apps = apps.OrderBy(app => app.Index);
-        return apps.Select(app => new ObservableApp(app));
+
+        var returnApps = apps.Select(app =>
+        {
+            if (_apps.TryGetValue(app.Id, out var findApp)) return findApp;
+
+            var observableApp = new ObservableApp(app);
+            _apps.Add(app.Id, observableApp);
+            return observableApp;
+        });
+
+        return returnApps;
     }
 }
