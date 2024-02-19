@@ -8,7 +8,7 @@ namespace MyApps.SetupBuilder
     {
         private static void Main()
         {
-            const string version = "1.0.0.2";
+            const string version = "1.0.0.3";
             
             var project = new Project("MyApps",
                 new Dir(@"%LocalAppDataFolder%\Programs\MyApps",
