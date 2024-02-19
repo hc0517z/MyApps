@@ -58,9 +58,15 @@ public partial class MainWindowViewModel : ObservableRecipient,
         _themeService = themeService;
         _directoryGroupService = directoryGroupService;
 
+        SetSystemTheme();
         LoadAsync().ConfigureAwait(false);
-
         IsActive = true;
+    }
+
+    private void SetSystemTheme()
+    {
+        var systemTheme = _themeService.GetSystemTheme();
+        if (systemTheme != ThemeType.Unknown) _themeService.SetTheme(systemTheme);
     }
 
     public AppsDropHandler AppsDropHandler { get; } = new();
