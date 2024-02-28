@@ -24,6 +24,8 @@ public partial class MainWindow
 
         Loaded += OnLoaded;
         Unloaded += OnUnloaded;
+        
+        Watcher.Watch(this, BackgroundType.Mica, true, true);
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
