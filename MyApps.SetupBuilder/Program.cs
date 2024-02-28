@@ -6,11 +6,13 @@ namespace MyApps.SetupBuilder
 {
     internal static class Program
     {
-        private static void Main()
+        static void Main()
         {
             const string version = "1.0.0.3";
-            
-            var project = new Project("MyApps",
+            const string displayName = "MyApps";
+
+            // Define the installation project
+            var project = new Project(displayName,
                 new Dir(@"%LocalAppDataFolder%\Programs\MyApps",
                     new Files(@"..\MyApps\bin\Release\net6.0-windows\*.*", f =>
                         f.EndsWith(".exe") ||
@@ -30,9 +32,12 @@ namespace MyApps.SetupBuilder
                 },
                 Version = new Version(version),
                 UI = WUI.WixUI_ProgressOnly,
-                GUID = new Guid("6f330b47-2577-43ad-0517-1861ba25889b"),
+                ProductId = new Guid("6f330b47-2577-43ad-0517-1861ca25889d"),
+                UpgradeCode = new Guid("6f330b47-2577-43ad-0517-1861ba25889b"),
                 OutFileName = $"Setup_MyApps_v{version}"
             };
+
+            // Compile and build MSI
             Compiler.BuildMsi(project);
         }
     }

@@ -6,7 +6,7 @@
 </auto-generated>
 -->
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="6f330b47-2577-43ad-0517-1861ca25889f" Name="MyApps" Language="1033" Codepage="Windows-1252" Version="1.0.0.3" UpgradeCode="6f330b47-2577-43ad-0517-1861ba25889b" Manufacturer="KimHC">
+  <Product Id="6f330b47-2577-43ad-0517-1861ca25889d" Name="MyApps" Language="1033" Codepage="Windows-1252" Version="1.0.0.3" UpgradeCode="6f330b47-2577-43ad-0517-1861ba25889b" Manufacturer="KimHC">
     <Package InstallerVersion="200" Compressed="yes" SummaryCodepage="Windows-1252" Languages="1033" />
     <Media Id="1" Cabinet="MyApps.cab" EmbedCab="yes" />
 
@@ -15,7 +15,7 @@
         <Directory Id="Programs" Name="Programs">
           <Directory Id="INSTALLDIR" Name="MyApps">
 
-            <Component Id="Component.CommunityToolkit.Mvvm.dll_1553008374" Guid="6f330b47-2577-43ad-0517-1861069346e9">
+            <Component Id="Component.CommunityToolkit.Mvvm.dll_1553008374" Guid="6f330b47-2577-43ad-0517-1861169346eb">
               <File Id="CommunityToolkit.Mvvm.dll_1553008374" Source="..\MyApps\bin\Release\net6.0-windows\CommunityToolkit.Mvvm.dll" />
               <RemoveFolder Id="INSTALLDIR" On="uninstall" />
 
@@ -24,7 +24,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.GongSolutions.WPF.DragDrop.dll_2970232007" Guid="6f330b47-2577-43ad-0517-186108d6d823">
+            <Component Id="Component.GongSolutions.WPF.DragDrop.dll_2970232007" Guid="6f330b47-2577-43ad-0517-186118d6d825">
               <File Id="GongSolutions.WPF.DragDrop.dll_2970232007" Source="..\MyApps\bin\Release\net6.0-windows\GongSolutions.WPF.DragDrop.dll" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -32,7 +32,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.Microsoft.Extensions.Configuration.Abstractions.dll_3019256655" Guid="6f330b47-2577-43ad-0517-186116f1439a">
+            <Component Id="Component.Microsoft.Extensions.Configuration.Abstractions.dll_3019256655" Guid="6f330b47-2577-43ad-0517-186126f1439c">
               <File Id="Microsoft.Extensions.Configuration.Abstractions.dll_3019256655" Source="..\MyApps\bin\Release\net6.0-windows\Microsoft.Extensions.Configuration.Abstractions.dll" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -40,7 +40,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.Microsoft.Extensions.Configuration.dll_3021225717" Guid="6f330b47-2577-43ad-0517-18610c92aa14">
+            <Component Id="Component.Microsoft.Extensions.Configuration.dll_3021225717" Guid="6f330b47-2577-43ad-0517-18611c92aa16">
               <File Id="Microsoft.Extensions.Configuration.dll_3021225717" Source="..\MyApps\bin\Release\net6.0-windows\Microsoft.Extensions.Configuration.dll" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -48,7 +48,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.Microsoft.Extensions.Configuration.EnvironmentVariables.dll_1753344294" Guid="6f330b47-2577-43ad-0517-1861a1db9689">
+            <Component Id="Component.Microsoft.Extensions.Configuration.EnvironmentVariables.dll_1753344294" Guid="6f330b47-2577-43ad-0517-1861b1db968b">
               <File Id="Microsoft.Extensions.Configuration.EnvironmentVariables.dll_1753344294" Source="..\MyApps\bin\Release\net6.0-windows\Microsoft.Extensions.Configuration.EnvironmentVariables.dll" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -56,7 +56,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.Microsoft.Extensions.Configuration.FileExtensions.dll_270282283" Guid="6f330b47-2577-43ad-0517-18611d9c6ac3">
+            <Component Id="Component.Microsoft.Extensions.Configuration.FileExtensions.dll_270282283" Guid="6f330b47-2577-43ad-0517-18612d9c6ac5">
               <File Id="Microsoft.Extensions.Configuration.FileExtensions.dll_270282283" Source="..\MyApps\bin\Release\net6.0-windows\Microsoft.Extensions.Configuration.FileExtensions.dll" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -64,7 +64,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.Microsoft.Extensions.Configuration.Json.dll_3616721235" Guid="6f330b47-2577-43ad-0517-1861f65174da">
+            <Component Id="Component.Microsoft.Extensions.Configuration.Json.dll_3616721235" Guid="6f330b47-2577-43ad-0517-1861065174dc">
               <File Id="Microsoft.Extensions.Configuration.Json.dll_3616721235" Source="..\MyApps\bin\Release\net6.0-windows\Microsoft.Extensions.Configuration.Json.dll" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -72,7 +72,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.Microsoft.Extensions.DependencyInjection.Abstractions.dll_3031027980" Guid="6f330b47-2577-43ad-0517-1861dd6dfe78">
+            <Component Id="Component.Microsoft.Extensions.DependencyInjection.Abstractions.dll_3031027980" Guid="6f330b47-2577-43ad-0517-1861ed6dfe7a">
               <File Id="Microsoft.Extensions.DependencyInjection.Abstractions.dll_3031027980" Source="..\MyApps\bin\Release\net6.0-windows\Microsoft.Extensions.DependencyInjection.Abstractions.dll" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -80,7 +80,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.Microsoft.Extensions.DependencyInjection.dll_958505107" Guid="6f330b47-2577-43ad-0517-186188c837d0">
+            <Component Id="Component.Microsoft.Extensions.DependencyInjection.dll_958505107" Guid="6f330b47-2577-43ad-0517-186198c837d2">
               <File Id="Microsoft.Extensions.DependencyInjection.dll_958505107" Source="..\MyApps\bin\Release\net6.0-windows\Microsoft.Extensions.DependencyInjection.dll" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -88,7 +88,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.Microsoft.Extensions.FileProviders.Abstractions.dll_1141934644" Guid="6f330b47-2577-43ad-0517-1861d413a762">
+            <Component Id="Component.Microsoft.Extensions.FileProviders.Abstractions.dll_1141934644" Guid="6f330b47-2577-43ad-0517-1861e413a764">
               <File Id="Microsoft.Extensions.FileProviders.Abstractions.dll_1141934644" Source="..\MyApps\bin\Release\net6.0-windows\Microsoft.Extensions.FileProviders.Abstractions.dll" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -96,7 +96,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.Microsoft.Extensions.FileProviders.Physical.dll_2739951585" Guid="6f330b47-2577-43ad-0517-186114b39ee0">
+            <Component Id="Component.Microsoft.Extensions.FileProviders.Physical.dll_2739951585" Guid="6f330b47-2577-43ad-0517-186124b39ee2">
               <File Id="Microsoft.Extensions.FileProviders.Physical.dll_2739951585" Source="..\MyApps\bin\Release\net6.0-windows\Microsoft.Extensions.FileProviders.Physical.dll" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -104,7 +104,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.Microsoft.Extensions.FileSystemGlobbing.dll_2569928138" Guid="6f330b47-2577-43ad-0517-18617de8c4a7">
+            <Component Id="Component.Microsoft.Extensions.FileSystemGlobbing.dll_2569928138" Guid="6f330b47-2577-43ad-0517-18618de8c4a9">
               <File Id="Microsoft.Extensions.FileSystemGlobbing.dll_2569928138" Source="..\MyApps\bin\Release\net6.0-windows\Microsoft.Extensions.FileSystemGlobbing.dll" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -112,7 +112,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.Microsoft.Extensions.Primitives.dll_3825568979" Guid="6f330b47-2577-43ad-0517-186105d0407c">
+            <Component Id="Component.Microsoft.Extensions.Primitives.dll_3825568979" Guid="6f330b47-2577-43ad-0517-186115d0407e">
               <File Id="Microsoft.Extensions.Primitives.dll_3825568979" Source="..\MyApps\bin\Release\net6.0-windows\Microsoft.Extensions.Primitives.dll" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -120,7 +120,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.Microsoft.Win32.SystemEvents.dll_3457411586" Guid="6f330b47-2577-43ad-0517-186170e80954">
+            <Component Id="Component.Microsoft.Win32.SystemEvents.dll_3457411586" Guid="6f330b47-2577-43ad-0517-186180e80956">
               <File Id="Microsoft.Win32.SystemEvents.dll_3457411586" Source="..\MyApps\bin\Release\net6.0-windows\Microsoft.Win32.SystemEvents.dll" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -128,7 +128,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.Microsoft.WindowsAPICodePack.dll_455227327" Guid="6f330b47-2577-43ad-0517-1861b5a63134">
+            <Component Id="Component.Microsoft.WindowsAPICodePack.dll_455227327" Guid="6f330b47-2577-43ad-0517-1861c5a63136">
               <File Id="Microsoft.WindowsAPICodePack.dll_455227327" Source="..\MyApps\bin\Release\net6.0-windows\Microsoft.WindowsAPICodePack.dll" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -136,7 +136,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.Microsoft.WindowsAPICodePack.Shell.dll_572673556" Guid="6f330b47-2577-43ad-0517-18613dd69fcf">
+            <Component Id="Component.Microsoft.WindowsAPICodePack.Shell.dll_572673556" Guid="6f330b47-2577-43ad-0517-18614dd69fd1">
               <File Id="Microsoft.WindowsAPICodePack.Shell.dll_572673556" Source="..\MyApps\bin\Release\net6.0-windows\Microsoft.WindowsAPICodePack.Shell.dll" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -144,7 +144,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.Microsoft.Xaml.Behaviors.dll_722683353" Guid="6f330b47-2577-43ad-0517-1861790daaab">
+            <Component Id="Component.Microsoft.Xaml.Behaviors.dll_722683353" Guid="6f330b47-2577-43ad-0517-1861890daaad">
               <File Id="Microsoft.Xaml.Behaviors.dll_722683353" Source="..\MyApps\bin\Release\net6.0-windows\Microsoft.Xaml.Behaviors.dll" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -152,7 +152,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.MyApps.deps.json_3426106203" Guid="6f330b47-2577-43ad-0517-186113fdd909">
+            <Component Id="Component.MyApps.deps.json_3426106203" Guid="6f330b47-2577-43ad-0517-186123fdd90b">
               <File Id="MyApps.deps.json_3426106203" Source="..\MyApps\bin\Release\net6.0-windows\MyApps.deps.json" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -160,7 +160,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.MyApps.dll_674051188" Guid="6f330b47-2577-43ad-0517-1861ded4a7a0">
+            <Component Id="Component.MyApps.dll_674051188" Guid="6f330b47-2577-43ad-0517-1861eed4a7a2">
               <File Id="MyApps.dll_674051188" Source="..\MyApps\bin\Release\net6.0-windows\MyApps.dll" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -168,7 +168,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.MyApps.exe_3047490614" Guid="6f330b47-2577-43ad-0517-1861d2845311">
+            <Component Id="Component.MyApps.exe_3047490614" Guid="6f330b47-2577-43ad-0517-1861e2845313">
               <File Id="MyApps.exe_3047490614" Source="..\MyApps\bin\Release\net6.0-windows\MyApps.exe" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -176,7 +176,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.MyApps.runtimeconfig.json_2959607900" Guid="6f330b47-2577-43ad-0517-18611ee2ce37">
+            <Component Id="Component.MyApps.runtimeconfig.json_2959607900" Guid="6f330b47-2577-43ad-0517-18612ee2ce39">
               <File Id="MyApps.runtimeconfig.json_2959607900" Source="..\MyApps\bin\Release\net6.0-windows\MyApps.runtimeconfig.json" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -184,7 +184,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.System.Drawing.Common.dll_1522865389" Guid="6f330b47-2577-43ad-0517-18611122a2ec">
+            <Component Id="Component.System.Drawing.Common.dll_1522865389" Guid="6f330b47-2577-43ad-0517-18612122a2ee">
               <File Id="System.Drawing.Common.dll_1522865389" Source="..\MyApps\bin\Release\net6.0-windows\System.Drawing.Common.dll" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -192,7 +192,7 @@
               </RegistryKey>
             </Component>
 
-            <Component Id="Component.Wpf.Ui.dll_3471448101" Guid="6f330b47-2577-43ad-0517-18614cb52a9e">
+            <Component Id="Component.Wpf.Ui.dll_3471448101" Guid="6f330b47-2577-43ad-0517-18615cb52aa0">
               <File Id="Wpf.Ui.dll_3471448101" Source="..\MyApps\bin\Release\net6.0-windows\Wpf.Ui.dll" />
 
               <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -203,7 +203,7 @@
             <Directory Id="ProgramMenuFolder" Name="ProgramMenuFolder">
               <Directory Id="MyApps.1" Name="MyApps">
 
-                <Component Id="Component.MyApps__" Guid="6f330b47-2577-43ad-0517-1861d30fdaf5">
+                <Component Id="Component.MyApps__" Guid="6f330b47-2577-43ad-0517-1861e30fdaf7">
                   <Shortcut Id="MyApps.1.MyApps__" WorkingDirectory="MyApps.1.MyApps__.WorkDir" Target="[INSTALLDIR]\MyApps.exe" Name="MyApps.lnk" />
 
                   <CreateFolder />
@@ -214,7 +214,7 @@
                   </RegistryKey>
                 </Component>
 
-                <Component Id="Component.Uninstall20MyApps" Guid="6f330b47-2577-43ad-0517-18617fd572e8">
+                <Component Id="Component.Uninstall20MyApps" Guid="6f330b47-2577-43ad-0517-18618fd572ea">
                   <Shortcut Id="MyApps.1.Uninstall20MyApps" WorkingDirectory="System64Folder" Target="[System64Folder]msiexec.exe" Arguments="/x [ProductCode]" Name="Uninstall MyApps.lnk" />
 
                   <CreateFolder />
@@ -229,7 +229,7 @@
 
             <Directory Id="DesktopFolder" Name="DesktopFolder">
 
-              <Component Id="Component.MyApps.1_" Guid="6f330b47-2577-43ad-0517-1861a0b8e446">
+              <Component Id="Component.MyApps.1_" Guid="6f330b47-2577-43ad-0517-1861b0b8e448">
                 <Shortcut Id="DesktopFolder.MyApps.1_" WorkingDirectory="MyApps.1.MyApps__.WorkDir" Target="[INSTALLDIR]\MyApps.exe" Name="MyApps.lnk" />
 
                 <CreateFolder />
@@ -243,7 +243,7 @@
 
             <Directory Id="Json" Name="Json">
 
-              <Component Id="Component.Json.EmptyDirectory" Guid="6f330b47-2577-43ad-0517-18612cbb8831">
+              <Component Id="Component.Json.EmptyDirectory" Guid="6f330b47-2577-43ad-0517-18613cbb8833">
                 <CreateFolder />
                 <RemoveFolder Id="Json" On="uninstall" />
 
@@ -259,7 +259,7 @@
                 <Directory Id="lib" Name="lib">
                   <Directory Id="net6.0_" Name="net6.0">
 
-                    <Component Id="Component.Microsoft.Win32.SystemEvents.dll_1949827470" Guid="6f330b47-2577-43ad-0517-1861f6eb6a9f">
+                    <Component Id="Component.Microsoft.Win32.SystemEvents.dll_1949827470" Guid="6f330b47-2577-43ad-0517-186106eb6aa1">
                       <File Id="Microsoft.Win32.SystemEvents.dll_1949827470" Source="..\MyApps\bin\Release\net6.0-windows\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll" />
                       <RemoveFolder Id="net6.0_" On="uninstall" />
 
@@ -268,7 +268,7 @@
                       </RegistryKey>
                     </Component>
 
-                    <Component Id="Component.System.Drawing.Common.dll_1053264387" Guid="6f330b47-2577-43ad-0517-18613ef4e706">
+                    <Component Id="Component.System.Drawing.Common.dll_1053264387" Guid="6f330b47-2577-43ad-0517-18614ef4e708">
                       <File Id="System.Drawing.Common.dll_1053264387" Source="..\MyApps\bin\Release\net6.0-windows\runtimes\win\lib\net6.0\System.Drawing.Common.dll" />
 
                       <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -278,7 +278,7 @@
 
                   </Directory>
 
-                  <Component Id="lib" Guid="6f330b47-2577-43ad-0517-18613788eb1f">
+                  <Component Id="lib" Guid="6f330b47-2577-43ad-0517-18614788eb21">
                     <RemoveFolder Id="lib" On="uninstall" />
 
                     <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -288,7 +288,7 @@
 
                 </Directory>
 
-                <Component Id="win" Guid="6f330b47-2577-43ad-0517-1861acea19b8">
+                <Component Id="win" Guid="6f330b47-2577-43ad-0517-1861bcea19ba">
                   <RemoveFolder Id="win" On="uninstall" />
 
                   <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -298,7 +298,7 @@
 
               </Directory>
 
-              <Component Id="runtimes" Guid="6f330b47-2577-43ad-0517-18614121a5ff">
+              <Component Id="runtimes" Guid="6f330b47-2577-43ad-0517-18615121a501">
                 <RemoveFolder Id="runtimes" On="uninstall" />
 
                 <RegistryKey Root="HKCU" Key="Software\WixSharp\Used">
@@ -309,7 +309,7 @@
             </Directory>
           </Directory>
 
-          <Component Id="Programs" Guid="6f330b47-2577-43ad-0517-186174a64699">
+          <Component Id="Programs" Guid="6f330b47-2577-43ad-0517-186184a6469b">
             <CreateFolder />
             <RemoveFolder Id="Programs" On="uninstall" />
 
