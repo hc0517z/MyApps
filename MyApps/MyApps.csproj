@@ -5,6 +5,7 @@
         <TargetFramework>net6.0-windows</TargetFramework>
         <ApplicationIcon>icon.ico</ApplicationIcon>
         <UseWPF>true</UseWPF>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
     </PropertyGroup>
 
     <ItemGroup>
