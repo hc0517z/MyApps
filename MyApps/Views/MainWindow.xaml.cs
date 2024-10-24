@@ -1,5 +1,8 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using CommunityToolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.Messaging;
+using MyApps.Messages;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls.Interfaces;
 using Wpf.Ui.Mvvm.Contracts;
@@ -44,5 +47,10 @@ public partial class MainWindow
     {
         var dialogControl = (IDialogControl)sender;
         dialogControl.Hide();
+    }
+
+    private void TitleBar_OnCloseClicked(object sender, RoutedEventArgs e)
+    {
+        WeakReferenceMessenger.Default.Send(new CloseMessage(true));
     }
 }

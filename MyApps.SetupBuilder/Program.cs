@@ -8,7 +8,7 @@ namespace MyApps.SetupBuilder
     {
         static void Main()
         {
-            const string version = "1.0.0.4";
+            const string version = "1.0.0.5";
             const string displayName = "MyApps";
 
             // Define the installation project

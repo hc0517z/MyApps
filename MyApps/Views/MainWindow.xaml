@@ -33,6 +33,7 @@
             VerticalContentAlignment="Center"
             FontFamily="{StaticResource KoPubDotumMedium}"
             FontSize="14"
+            CloseClicked="TitleBar_OnCloseClicked"
             Icon="../icon.ico" />
 
         <Grid Grid.Row="1" VerticalAlignment="Top">
